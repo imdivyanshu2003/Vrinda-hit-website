@@ -1,0 +1,355 @@
+:root {
+    --bg-dark: #090a0f;
+    --bg-card: #151821;
+    --text-light: #ffffff;
+    --text-muted: #8b949e;
+    
+    --accent-primary: #ff4757;
+    --accent-secondary: #ff7f50;
+    --wa-color: #25D366;
+    
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    
+    --font-heading: 'Outfit', sans-serif;
+    --font-body: 'Inter', sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-light);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+}
+
+h1, h2, h3, h4 {
+    font-family: var(--font-heading);
+    line-height: 1.2;
+}
+
+a {
+    text-decoration: none;
+}
+
+/* ====================
+   BUTTONS & TYPOGRAPHY
+==================== */
+.text-gradient {
+    background: linear-gradient(to right, var(--accent-primary), var(--accent-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.btn-primary, .btn-large {
+    background: var(--wa-color);
+    color: #fff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-weight: 600;
+    font-family: var(--font-body);
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+}
+
+.btn-large {
+    padding: 18px 40px;
+    font-size: 1.2rem;
+}
+
+.btn-primary:hover, .btn-large:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(37, 211, 102, 0.5);
+}
+
+/* ====================
+   CONTAINER & LAYOUT
+==================== */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 80px 5%;
+}
+
+.section-heading {
+    text-align: center;
+    margin-bottom: 60px;
+}
+.section-heading h2 {
+    font-size: 2.5rem;
+    margin-bottom: 16px;
+}
+.section-heading p {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.grid {
+    display: grid;
+    gap: 30px;
+}
+
+/* ====================
+   NAVBAR
+==================== */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 5%;
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    z-index: 10;
+}
+.navbar .logo {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+.navbar .logo span {
+    color: var(--accent-primary);
+}
+
+/* ====================
+   HERO SECTION
+==================== */
+.hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 120px 20px 60px;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    width: 800px; height: 800px;
+    background: radial-gradient(circle, rgba(255, 71, 87, 0.1) 0%, rgba(9, 10, 15, 0) 70%);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+}
+
+.pill-badge {
+    display: inline-block;
+    padding: 8px 16px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+}
+
+.hero h1 {
+    font-size: 4.5rem;
+    margin-bottom: 24px;
+}
+
+.hero-subtext {
+    font-size: 1.25rem;
+    color: var(--text-muted);
+    max-width: 600px;
+    margin: 0 auto 40px;
+}
+
+.sub-action {
+    margin-top: 16px;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+/* ====================
+   FEATURES SECTION
+==================== */
+.features-grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.feature-card {
+    background: var(--bg-card);
+    border: 1px solid var(--glass-border);
+    padding: 40px 30px;
+    border-radius: 16px;
+    text-align: center;
+    transition: transform 0.3s;
+}
+.feature-card:hover {
+    transform: translateY(-5px);
+}
+.feature-card .icon {
+    width: 64px; height: 64px;
+    margin: 0 auto 24px;
+    border-radius: 16px;
+    display: flex; justify-content: center; align-items: center;
+    font-size: 2rem;
+}
+.icon.red { background: rgba(255, 71, 87, 0.1); color: #ff4757; }
+.icon.green { background: rgba(37, 211, 102, 0.1); color: #25D366; }
+.icon.purple { background: rgba(156, 39, 176, 0.1); color: #9c27b0; }
+
+.feature-card h3 {
+    margin-bottom: 12px;
+    font-size: 1.3rem;
+}
+.feature-card p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+/* ====================
+   TEMPLATES SECTION
+==================== */
+.template-grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.template-mockup {
+    background: #000;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 4px solid #222;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+.mockup-header {
+    padding: 12px;
+    text-align: center;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 0.9rem;
+    background: #111;
+    border-bottom: 1px solid #222;
+}
+.mockup-body {
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 400px;
+}
+.circle-img {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    margin-bottom: 20px;
+}
+.line {
+    border-radius: 4px;
+    background: rgba(255,255,255,0.2);
+    margin-bottom: 12px;
+}
+.title-line { width: 150px; height: 16px; }
+.sub-line { width: 200px; height: 10px; margin-bottom: 30px; }
+.mini-line { width: 100%; height: 40px; margin-bottom: 10px; border-radius: 8px;}
+
+.mock-btn {
+    width: 100%;
+    padding: 12px;
+    border-radius: 30px;
+    display: flex; justify-content: center; align-items: center; gap: 8px;
+    font-weight: bold; font-size: 0.9rem;
+    margin-bottom: 30px;
+}
+
+/* Template Themes */
+.bhakti .mockup-body { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); color: #222;}
+.bhakti .line, .bhakti .circle-img { background: rgba(0,0,0,0.1); }
+.bhakti .mock-btn { background: #25D366; color: #fff; }
+
+.nutrition .mockup-body { background: #e8f5e9; color: #1b5e20;}
+.nutrition .line, .nutrition .circle-img { background: rgba(0,0,0,0.1); }
+.nutrition .mock-btn { background: #4caf50; color: #fff; }
+
+.fitness .mockup-body { background: #111; color: #fff;}
+.fitness .mock-btn { background: #00E676; color: #000; }
+
+/* ====================
+   TESTIMONIALS
+==================== */
+.testimonials-grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+.testimonial-card {
+    background: var(--bg-card);
+    border: 1px solid var(--glass-border);
+    padding: 30px;
+    border-radius: 16px;
+}
+.testimonial-card p {
+    font-size: 1.1rem;
+    font-style: italic;
+    margin-bottom: 24px;
+}
+.author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.author .avatar {
+    width: 40px; height: 40px;
+    background: var(--accent-primary);
+    border-radius: 50%;
+    display: flex; justify-content: center; align-items: center;
+    color: #fff;
+}
+.author span {
+    font-weight: 600;
+}
+
+/* ====================
+   CTA & FOOTER
+==================== */
+.cta-section {
+    padding: 80px 5%;
+}
+.cta-box {
+    background: linear-gradient(135deg, #2a0845 0%, #6441A5 100%);
+    border-radius: 24px;
+    padding: 60px 5%;
+    text-align: center;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+.cta-box h2 {
+    font-size: 2.5rem;
+    margin-bottom: 16px;
+}
+.cta-box p {
+    font-size: 1.2rem;
+    margin-bottom: 40px;
+    opacity: 0.9;
+}
+
+footer {
+    text-align: center;
+    padding: 40px 5%;
+    border-top: 1px solid var(--glass-border);
+    color: var(--text-muted);
+}
+
+@media (max-width: 768px) {
+    .hero h1 { font-size: 2.8rem; }
+    .section-heading h2 { font-size: 2rem; }
+    .cta-box h2 { font-size: 2rem; }
+}
