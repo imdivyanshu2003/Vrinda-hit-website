@@ -135,6 +135,7 @@ a {
     height: 44px;
     border-radius: 50%;
     object-fit: cover;
+    flex-shrink: 0;
 }
 .navbar .logo span {
     color: var(--accent-primary);
