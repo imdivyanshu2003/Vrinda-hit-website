@@ -123,9 +123,18 @@ a {
     z-index: 10;
 }
 .navbar .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
     font-family: var(--font-heading);
     font-size: 1.5rem;
     font-weight: 800;
+}
+.nav-logo-img {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
 }
 .navbar .logo span {
     color: var(--accent-primary);
@@ -360,6 +369,11 @@ footer {
     .navbar .logo {
         font-size: 1.3rem;
         line-height: 1.2;
+        gap: 8px;
+    }
+    .nav-logo-img {
+        width: 36px;
+        height: 36px;
     }
     .navbar .logo span {
         display: block;
