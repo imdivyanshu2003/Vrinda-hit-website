@@ -14,4 +14,4 @@ User-agent: DuckDuckBot
 Allow: /
 
 # Sitemap location
-Sitemap: https://vrindahit.com/sitemap.xml
+Sitemap: https://vrindahitwebsite.com/sitemap.xml
