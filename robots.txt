@@ -1,0 +1,17 @@
+# Vrinda Hit Website - robots.txt
+User-agent: *
+Allow: /
+Disallow: /Demo Folder for demo photo or videos/
+
+# Allow all major search engines full access
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+# Sitemap location
+Sitemap: https://vrindahit.com/sitemap.xml

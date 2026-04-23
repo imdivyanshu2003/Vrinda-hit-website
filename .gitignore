@@ -1,0 +1,14 @@
+# Local demo media (large files not needed in repo)
+Demo Folder for demo photo or videos/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Node / build
+node_modules/
+dist/
+.env
+.env.local
