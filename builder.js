@@ -1,48 +1,58 @@
 /* =====================================================
-   AI Website Preview Builder — Chatbot lead-capture flow
+   AI Website Preview Builder — Gamified Lead-Capture Flow
+   Premium chatbot experience with XP, achievements, and
+   immersive website-building animation
    ===================================================== */
 (function () {
     'use strict';
 
     // Configuration
     const WHATSAPP_NUMBER = '917505483523';
-    const TYPING_DELAY = 700;
-    const STEP_DURATION = 900;
+    const TYPING_DELAY = 800;
+    const STEP_DURATION = 1200;
 
     const questions = [
         {
             key: 'name',
-            bot: "Hi! I'm Vrinda AI. Let's design your dream website in 60 seconds. ✨\n\nFirst — what should I call you?",
-            placeholder: 'Your name',
+            bot: "Hey there! 👋 I'm Vrinda AI — your personal website architect.\n\nLet's build something incredible together. What's your name?",
+            placeholder: 'Enter your name',
             hint: 'e.g. Radha, Arjun, Priya',
             type: 'text',
+            xp: 50,
+            achievement: '🎯 Identity Unlocked',
             validate: (v) => v.trim().length >= 2 || 'Please enter at least 2 characters'
         },
         {
             key: 'idea',
-            bot: (data) => `Nice to meet you, ${data.name}! 🙏\n\nWhat's your business or idea? (The more specific, the better your preview.)`,
-            placeholder: 'e.g. Vrindavan seva page, fitness coaching, diet plans',
-            hint: 'Tell me about your brand or service',
+            bot: (data) => `Great to meet you, ${data.name}! ✨\n\nNow tell me — what's the big idea? What kind of website do you want? Be specific and dream big!`,
+            placeholder: 'Describe your dream website...',
+            hint: 'e.g. A fitness coaching site, spiritual seva page, online store',
             type: 'text',
-            validate: (v) => v.trim().length >= 4 || 'Please describe your idea in a bit more detail'
+            xp: 100,
+            achievement: '💡 Vision Captured',
+            validate: (v) => v.trim().length >= 4 || 'Tell me more about your idea (at least 4 characters)'
         },
         {
             key: 'email',
-            bot: "Love it! 💫 Where should we send your preview and updates?",
+            bot: (data) => `Love the vision! 🔥\n\nDrop your email — I'll send your website preview and exclusive design concepts here.`,
             placeholder: 'you@email.com',
-            hint: 'Your email address',
+            hint: 'We\'ll send your preview here',
             type: 'email',
-            validate: (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) || 'Please enter a valid email'
+            xp: 75,
+            achievement: '📧 Connected',
+            validate: (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) || 'Please enter a valid email address'
         },
         {
             key: 'phone',
-            bot: "Last step — your WhatsApp number so we can send your live website once it's built?",
+            bot: (data) => `Almost there, ${data.name}! 🚀\n\nYour WhatsApp number — so I can send you the live website link once it's ready.`,
             placeholder: '+91 98765 43210',
-            hint: 'Include country code for faster response',
+            hint: 'WhatsApp number with country code',
             type: 'tel',
+            xp: 75,
+            achievement: '📱 Mission Complete',
             validate: (v) => {
                 const digits = v.replace(/\D/g, '');
-                return digits.length >= 10 || 'Please enter a valid phone number';
+                return digits.length >= 10 || 'Please enter a valid phone number (10+ digits)';
             }
         }
     ];
@@ -50,10 +60,12 @@
     // State
     const data = {};
     let currentStep = 0;
+    let totalXP = 0;
 
-    // DOM refs (resolved on DOMContentLoaded)
+    // DOM refs
     let messagesEl, inputEl, formEl, progressBar, hintEl;
     let chatScreen, loadingScreen, resultScreen;
+    let xpCounter, xpFill, achievementToast, stepIndicator;
 
     function init() {
         messagesEl = document.getElementById('chat-messages');
@@ -64,15 +76,19 @@
         chatScreen = document.getElementById('chat-screen');
         loadingScreen = document.getElementById('loading-screen');
         resultScreen = document.getElementById('result-screen');
+        xpCounter = document.getElementById('xp-counter');
+        xpFill = document.getElementById('xp-fill');
+        achievementToast = document.getElementById('achievement-toast');
+        stepIndicator = document.getElementById('step-indicator');
 
-        if (!formEl) return; // Builder not on this page
+        if (!formEl) return;
 
         formEl.addEventListener('submit', handleSubmit);
 
         const restartBtn = document.getElementById('restart-btn');
         if (restartBtn) restartBtn.addEventListener('click', restart);
 
-        // Kick off the conversation
+        // Kick off
         askNext();
     }
 
@@ -84,6 +100,7 @@
 
         const q = questions[currentStep];
         updateProgress();
+        updateStepIndicator();
         updateInputFor(q);
         showTypingThen(() => {
             const text = typeof q.bot === 'function' ? q.bot(data) : q.bot;
@@ -104,15 +121,57 @@
             return;
         }
 
-        // Store + echo user message
+        // Store + echo
         data[q.key] = value;
         addUserMessage(value);
         inputEl.value = '';
         hintEl.textContent = '';
         hintEl.classList.remove('error');
 
+        // Award XP + achievement
+        awardXP(q.xp || 50);
+        if (q.achievement) {
+            setTimeout(() => showAchievement(q.achievement), 300);
+        }
+
         currentStep++;
         askNext();
+    }
+
+    function awardXP(points) {
+        totalXP += points;
+        if (xpCounter) {
+            animateNumber(xpCounter, totalXP - points, totalXP, 600);
+        }
+        if (xpFill) {
+            const pct = Math.min(100, (totalXP / 300) * 100);
+            xpFill.style.width = pct + '%';
+        }
+    }
+
+    function animateNumber(el, from, to, duration) {
+        const start = performance.now();
+        const diff = to - from;
+        function tick(now) {
+            const elapsed = now - start;
+            const progress = Math.min(elapsed / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+            el.textContent = Math.round(from + diff * eased);
+            if (progress < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+    }
+
+    function showAchievement(text) {
+        if (!achievementToast) return;
+        achievementToast.textContent = text;
+        achievementToast.classList.add('show');
+        setTimeout(() => achievementToast.classList.remove('show'), 2200);
+    }
+
+    function updateStepIndicator() {
+        if (!stepIndicator) return;
+        stepIndicator.textContent = `Step ${currentStep + 1} of ${questions.length}`;
     }
 
     function addBotMessage(text) {
@@ -175,28 +234,66 @@
         messagesEl.scrollTop = messagesEl.scrollHeight;
     }
 
-    // =============== Final flow ===============
+    // =============== Building animation steps ===============
+    const buildingSteps = [
+        { icon: 'ph-fill ph-brain', text: 'Analyzing your vision...', duration: 1800 },
+        { icon: 'ph-fill ph-layout', text: 'Designing page structure...', duration: 1500 },
+        { icon: 'ph-fill ph-palette', text: 'Applying premium styling...', duration: 1400 },
+        { icon: 'ph-fill ph-device-mobile', text: 'Optimizing for mobile...', duration: 1200 },
+        { icon: 'ph-fill ph-globe-hemisphere-west', text: 'Deploying to the cloud...', duration: 1000 },
+        { icon: 'ph-fill ph-rocket-launch', text: 'Launching your website!', duration: 800 }
+    ];
+
     function finishFlow() {
         updateProgress();
+
+        // Final XP burst
+        awardXP(0);
+
         // Hide chat, show loader
         chatScreen.classList.add('hidden');
         loadingScreen.classList.remove('hidden');
 
-        const stepItems = document.querySelectorAll('#progress-steps li');
-        stepItems.forEach((el, idx) => {
-            setTimeout(() => markStepComplete(el), STEP_DURATION * (idx + 1));
+        // Animate building steps sequentially
+        const stepsContainer = document.getElementById('progress-steps');
+        if (stepsContainer) stepsContainer.innerHTML = '';
+
+        let delay = 0;
+        buildingSteps.forEach((step, idx) => {
+            setTimeout(() => {
+                // Add step item
+                const li = document.createElement('li');
+                li.innerHTML = `<i class="${step.icon}"></i> ${step.text}`;
+                li.className = 'building-step';
+                if (stepsContainer) stepsContainer.appendChild(li);
+
+                // Update percentage
+                const percentEl = document.getElementById('build-percent');
+                if (percentEl) {
+                    const pct = Math.round(((idx + 1) / buildingSteps.length) * 100);
+                    animateNumber(percentEl, idx === 0 ? 0 : Math.round((idx / buildingSteps.length) * 100), pct, step.duration * 0.8);
+                }
+
+                // Update circular progress
+                const circleProgress = document.getElementById('circle-progress');
+                if (circleProgress) {
+                    const pct = ((idx + 1) / buildingSteps.length) * 100;
+                    const circumference = 2 * Math.PI * 54;
+                    const offset = circumference - (pct / 100) * circumference;
+                    circleProgress.style.strokeDashoffset = offset;
+                }
+
+                // Mark as done after duration
+                setTimeout(() => {
+                    li.classList.add('done');
+                }, step.duration * 0.7);
+
+            }, delay);
+            delay += step.duration;
         });
 
         // After all steps -> show result
-        setTimeout(showResult, STEP_DURATION * (stepItems.length + 1));
-    }
-
-    function markStepComplete(el) {
-        const icon = el.querySelector('i');
-        if (icon) {
-            icon.className = 'ph-fill ph-check-circle';
-        }
-        el.classList.add('done');
+        setTimeout(showResult, delay + 600);
     }
 
     function showResult() {
@@ -227,13 +324,79 @@
             claimBtn.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
         }
 
-        // Scroll builder into view smoothly
+        // Launch confetti
+        launchConfetti();
+
+        // Scroll
         const builderEl = document.getElementById('builder');
         if (builderEl) builderEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
+    function launchConfetti() {
+        const canvas = document.getElementById('confetti-canvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        canvas.width = canvas.parentElement.offsetWidth;
+        canvas.height = canvas.parentElement.offsetHeight;
+        canvas.style.display = 'block';
+
+        const colors = ['#7C3AED', '#EC4899', '#F59E0B', '#10B981', '#6366F1', '#F43F5E'];
+        const particles = [];
+
+        for (let i = 0; i < 80; i++) {
+            particles.push({
+                x: canvas.width * Math.random(),
+                y: -20 - Math.random() * 100,
+                w: 6 + Math.random() * 6,
+                h: 4 + Math.random() * 4,
+                color: colors[Math.floor(Math.random() * colors.length)],
+                vx: (Math.random() - 0.5) * 3,
+                vy: 2 + Math.random() * 4,
+                rotation: Math.random() * 360,
+                rotSpeed: (Math.random() - 0.5) * 10,
+                opacity: 1
+            });
+        }
+
+        let frame = 0;
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            let alive = false;
+
+            particles.forEach(p => {
+                if (p.opacity <= 0) return;
+                alive = true;
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.1;
+                p.rotation += p.rotSpeed;
+
+                if (p.y > canvas.height * 0.7) {
+                    p.opacity -= 0.02;
+                }
+
+                ctx.save();
+                ctx.translate(p.x, p.y);
+                ctx.rotate((p.rotation * Math.PI) / 180);
+                ctx.globalAlpha = Math.max(0, p.opacity);
+                ctx.fillStyle = p.color;
+                ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+                ctx.restore();
+            });
+
+            frame++;
+            if (alive && frame < 200) {
+                requestAnimationFrame(draw);
+            } else {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                canvas.style.display = 'none';
+            }
+        }
+
+        requestAnimationFrame(draw);
+    }
+
     function toBrandName(name, idea) {
-        // Use first capitalized word from name, fallback to first word of idea
         const nm = (name || '').trim().split(/\s+/)[0];
         if (nm) return capitalize(nm) + "'s";
         const ideaWord = (idea || 'Your').trim().split(/\s+/)[0];
@@ -261,19 +424,27 @@
     }
 
     function restart() {
-        // Reset state
         currentStep = 0;
+        totalXP = 0;
         for (const k in data) delete data[k];
         messagesEl.innerHTML = '';
         inputEl.value = '';
         hintEl.textContent = '';
 
-        // Reset step icons
-        document.querySelectorAll('#progress-steps li').forEach((el) => {
-            el.classList.remove('done');
-            const icon = el.querySelector('i');
-            if (icon) icon.className = 'ph ph-circle-dashed';
-        });
+        if (xpCounter) xpCounter.textContent = '0';
+        if (xpFill) xpFill.style.width = '0%';
+
+        const stepsContainer = document.getElementById('progress-steps');
+        if (stepsContainer) stepsContainer.innerHTML = '';
+
+        const percentEl = document.getElementById('build-percent');
+        if (percentEl) percentEl.textContent = '0';
+
+        const circleProgress = document.getElementById('circle-progress');
+        if (circleProgress) {
+            const circumference = 2 * Math.PI * 54;
+            circleProgress.style.strokeDashoffset = circumference;
+        }
 
         resultScreen.classList.add('hidden');
         loadingScreen.classList.add('hidden');

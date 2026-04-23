@@ -244,17 +244,27 @@
         </div>
     </header>
 
-    <!-- AI WEBSITE BUILDER (Chatbot Lead-Capture) -->
+    <!-- AI WEBSITE BUILDER — Gamified Lead-Capture -->
     <section class="builder-section" id="builder">
         <div class="container">
             <div class="section-heading">
-                <span class="section-tag"><i class="ph-fill ph-sparkle"></i> Try It Now — Free</span>
-                <h2>See Your Website Preview in <span class="text-gradient">60 Seconds</span></h2>
-                <p>Answer 4 quick questions. Our AI generates a live preview of your dream website — instantly.</p>
+                <span class="section-tag"><i class="ph-fill ph-game-controller"></i> Interactive Builder</span>
+                <h2>Build Your Dream Website in <span class="text-gradient">60 Seconds</span></h2>
+                <p>Answer 4 quick questions. Watch us build your website in real-time — powered by AI.</p>
+            </div>
+
+            <!-- Floating particles background -->
+            <div class="builder-particles" aria-hidden="true">
+                <div class="particle p1"></div>
+                <div class="particle p2"></div>
+                <div class="particle p3"></div>
+                <div class="particle p4"></div>
+                <div class="particle p5"></div>
+                <div class="particle p6"></div>
             </div>
 
             <div class="chat-builder" id="chat-builder">
-                <!-- HEADER -->
+                <!-- HEADER with XP + Progress -->
                 <div class="chat-header">
                     <div class="chat-avatar">
                         <i class="ph-fill ph-sparkle"></i>
@@ -263,44 +273,62 @@
                         <h3>Vrinda AI</h3>
                         <span class="online-status"><span class="online-dot"></span> Online now</span>
                     </div>
+                    <div class="xp-badge" id="xp-badge">
+                        <i class="ph-fill ph-lightning"></i>
+                        <span id="xp-counter">0</span> XP
+                        <div class="xp-fill-track"><div class="xp-fill-bar" id="xp-fill"></div></div>
+                    </div>
                     <div class="progress-track">
                         <div class="progress-bar" id="progress-bar"></div>
                     </div>
                 </div>
 
+                <!-- Achievement Toast -->
+                <div class="achievement-toast" id="achievement-toast"></div>
+
                 <!-- CHAT SCREEN -->
                 <div class="chat-screen" id="chat-screen">
+                    <div class="chat-step-indicator" id="step-indicator">Step 1 of 4</div>
                     <div class="chat-messages" id="chat-messages"></div>
 
                     <form class="chat-input-form" id="chat-input-form" autocomplete="off">
                         <input type="text" id="chat-input" placeholder="Type your answer..." autocomplete="off" required>
                         <button type="submit" aria-label="Send">
-                            <i class="ph-fill ph-arrow-up"></i>
+                            <i class="ph-fill ph-paper-plane-tilt"></i>
                         </button>
                     </form>
                     <div class="input-hint" id="input-hint"></div>
                 </div>
 
-                <!-- LOADING SCREEN -->
+                <!-- BUILDING SCREEN (replaces old loading) -->
                 <div class="loading-screen hidden" id="loading-screen">
-                    <div class="loader-orb">
-                        <div class="orb-ring"></div>
-                        <div class="orb-ring"></div>
-                        <div class="orb-core"><i class="ph-fill ph-sparkle"></i></div>
+                    <div class="build-hero-anim">
+                        <div class="circle-progress-wrap">
+                            <svg class="circle-progress-svg" viewBox="0 0 120 120">
+                                <circle class="circle-bg" cx="60" cy="60" r="54" />
+                                <circle class="circle-fg" id="circle-progress" cx="60" cy="60" r="54" />
+                            </svg>
+                            <div class="circle-center">
+                                <span class="build-percent" id="build-percent">0</span><span class="build-pct-sign">%</span>
+                            </div>
+                        </div>
                     </div>
-                    <h3>Crafting your website...</h3>
-                    <ul class="progress-steps" id="progress-steps">
-                        <li data-step="1"><i class="ph ph-circle-dashed"></i> Analyzing your idea</li>
-                        <li data-step="2"><i class="ph ph-circle-dashed"></i> Designing layout</li>
-                        <li data-step="3"><i class="ph ph-circle-dashed"></i> Applying colors &amp; fonts</li>
-                        <li data-step="4"><i class="ph ph-circle-dashed"></i> Optimizing for mobile</li>
-                    </ul>
+                    <h3 class="build-title">Building Your Website<span class="build-dots"><span>.</span><span>.</span><span>.</span></span></h3>
+                    <p class="build-subtitle">Our AI is crafting something incredible</p>
+                    <ul class="progress-steps" id="progress-steps"></ul>
                 </div>
 
-                <!-- RESULT SCREEN -->
+                <!-- RESULT SCREEN with Confetti -->
                 <div class="result-screen hidden" id="result-screen">
-                    <div class="result-badge"><i class="ph-fill ph-check-circle"></i> Preview Ready</div>
+                    <canvas id="confetti-canvas" class="confetti-canvas"></canvas>
+
+                    <div class="result-badge"><i class="ph-fill ph-trophy"></i> Website Created!</div>
                     <h3>Meet <span id="preview-name">Your</span>'s Website</h3>
+
+                    <div class="result-xp-summary">
+                        <div class="xp-earned"><i class="ph-fill ph-lightning"></i> 300 XP Earned</div>
+                        <div class="xp-rank">Rank: <strong>Website Visionary</strong></div>
+                    </div>
 
                     <div class="preview-wrapper">
                         <div class="preview-phone-frame">
@@ -324,7 +352,7 @@
                     </div>
 
                     <div class="result-info">
-                        <p class="result-line"><i class="ph-fill ph-sparkle"></i> <strong>This is just the preview.</strong> Get the full professional design, custom sections, testimonials, gallery &amp; your own domain — delivered in 24 hours.</p>
+                        <p class="result-line"><i class="ph-fill ph-sparkle"></i> <strong>This is just a preview.</strong> Get the full professional design, custom sections, testimonials, gallery &amp; your own domain — delivered in 24 hours.</p>
                         <div class="result-pricing">
                             <div class="price-tag">
                                 <span class="price-label">Starting at</span>
@@ -334,10 +362,10 @@
                         </div>
                     </div>
 
-                    <a href="#" id="claim-btn" class="btn-whatsapp btn-large" target="_blank">
+                    <a href="#" id="claim-btn" class="btn-whatsapp btn-large claim-cta" target="_blank">
                         <i class="ph-fill ph-whatsapp-logo"></i> Claim My Website Now
                     </a>
-                    <p class="claim-hint"><i class="ph-fill ph-shield-check"></i> No payment until you approve the final design. Zero risk.</p>
+                    <p class="claim-hint"><i class="ph-fill ph-shield-check"></i> No payment until you approve. Zero risk.</p>
 
                     <button class="restart-btn" id="restart-btn">
                         <i class="ph ph-arrow-counter-clockwise"></i> Try with a different idea
