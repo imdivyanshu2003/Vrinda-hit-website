@@ -158,12 +158,16 @@
 
                 if (resp.ok && data && data.ok) {
                     result.className = 'result show ok';
+                    const truncMsg = data.meta.truncated
+                        ? `\n⚠️  Output was truncated at max_tokens — site may be missing footer/end. Consider bumping max_tokens.`
+                        : '';
                     result.innerHTML =
                         `✅ Success in ${elapsed}s\n\n` +
                         `Slug: ${data.slug}\n` +
                         `URL:  ${data.url}\n` +
+                        `Model: ${data.meta.model || 'n/a'}\n` +
                         `Tokens: in=${data.meta.tokensIn}, out=${data.meta.tokensOut}\n` +
-                        `Size: ${data.meta.sizeKb} KB\n\n` +
+                        `Size: ${data.meta.sizeKb} KB${truncMsg}\n\n` +
                         `<a class="open" href="${data.url}" target="_blank">🚀 Open generated website</a>`;
                 } else if (data) {
                     result.className = 'result show err';

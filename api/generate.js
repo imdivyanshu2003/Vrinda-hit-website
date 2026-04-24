@@ -142,14 +142,30 @@ Raw HTML only. Begin your response with <!DOCTYPE html> literally as the first c
 }
 
 // -------- Extract HTML from Claude response --------
+// Returns { html, truncated } or null if we can't find any HTML at all.
 function extractHtml(text) {
     if (!text) return null;
-    // Strip possible markdown fences
-    const cleaned = text.replace(/^```(?:html)?\s*/i, '').replace(/```\s*$/, '').trim();
+    // Strip possible markdown fences (may appear at either end)
+    const cleaned = text
+        .replace(/^\s*```(?:html)?\s*/i, '')
+        .replace(/```\s*$/, '')
+        .trim();
+
     const start = cleaned.indexOf('<!DOCTYPE');
+    if (start === -1) return null;
+
     const end = cleaned.lastIndexOf('</html>');
-    if (start === -1 || end === -1) return null;
-    return cleaned.slice(start, end + '</html>'.length);
+    if (end !== -1) {
+        return { html: cleaned.slice(start, end + '</html>'.length), truncated: false };
+    }
+
+    // Response was truncated before Claude wrote </html>. Auto-close so the
+    // browser still renders (it's lenient). We also try to close a trailing
+    // <body> if it's open.
+    let partial = cleaned.slice(start);
+    if (!/<\/body>/i.test(partial)) partial += '\n</body>';
+    partial += '\n</html>';
+    return { html: partial, truncated: true };
 }
 
 // -------- Handler --------
@@ -192,7 +208,7 @@ export default async function handler(req, res) {
         const model = process.env.ANTHROPIC_MODEL || 'claude-haiku-4-5';
         const message = await client.messages.create({
             model,
-            max_tokens: 7000,
+            max_tokens: 12000,
             temperature: 0.7,
             messages: [
                 { role: 'user', content: buildPrompt({ idea, brand, theme, style, palette, plan, email, phone }) }
@@ -204,13 +220,16 @@ export default async function handler(req, res) {
             .map(b => b.text)
             .join('\n');
 
-        const html = extractHtml(rawText);
-        if (!html) {
+        const extracted = extractHtml(rawText);
+        if (!extracted) {
             return res.status(502).json({
                 error: 'Claude response did not contain valid HTML',
+                stopReason: message.stop_reason,
                 preview: rawText.slice(0, 400)
             });
         }
+        const html = extracted.html;
+        const wasTruncated = extracted.truncated || message.stop_reason === 'max_tokens';
 
         // Build unique slug based on brand/idea
         const baseSlug = slugify(brand || idea.split(/\s+/).slice(0, 3).join(' '));
@@ -278,7 +297,9 @@ export default async function handler(req, res) {
                 tokensIn,
                 tokensOut,
                 latencyMs,
-                sizeKb: Math.round(htmlSizeBytes / 102.4) / 10
+                sizeKb: Math.round(htmlSizeBytes / 102.4) / 10,
+                truncated: wasTruncated,
+                model
             }
         });
     } catch (err) {
