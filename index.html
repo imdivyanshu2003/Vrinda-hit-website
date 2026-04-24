@@ -54,27 +54,10 @@
 
     <!-- ============================================================
          ANALYTICS & TRACKING
-         ⚠️ REPLACE the two placeholder IDs below with your real IDs:
-            1. GA4_MEASUREMENT_ID → your GA4 ID (format: G-XXXXXXXXXX)
-               Get it from https://analytics.google.com/
-            2. META_PIXEL_ID → your Meta Pixel ID (15–16 digit number)
-               Get it from https://business.facebook.com/events_manager
-         Once you get them, just Find+Replace in this file.
+         - Vercel Analytics: handles pageviews/traffic (via Vercel dashboard)
+         - Meta Pixel: handles ad conversions + retargeting (for IG/FB ads)
+         GA4 intentionally NOT included — not needed unless running Google Ads.
     ============================================================ -->
-
-    <!-- Google Analytics 4 -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=GA4_MEASUREMENT_ID"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-        gtag('config', 'GA4_MEASUREMENT_ID', { anonymize_ip: true });
-        // Helper: fire as window.trackEvent('name', {params})
-        window.trackEvent = function (name, params) {
-            try { gtag('event', name, params || {}); } catch (e) {}
-            try { if (window.fbq) window.fbq('trackCustom', name, params || {}); } catch (e) {}
-        };
-    </script>
 
     <!-- Meta Pixel (Facebook / Instagram Ads) -->
     <script>
@@ -86,12 +69,17 @@
             n.queue = []; t = b.createElement(e); t.async = !0;
             t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s)
         }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
-        fbq('init', 'META_PIXEL_ID');
+        fbq('init', '1290731092392108');
         fbq('track', 'PageView');
+
+        // Unified helper: window.trackEvent('name', {params}) — used by builder.js & sticky CTAs
+        window.trackEvent = function (name, params) {
+            try { if (window.fbq) window.fbq('trackCustom', name, params || {}); } catch (e) {}
+        };
     </script>
     <noscript>
         <img height="1" width="1" style="display:none"
-             src="https://www.facebook.com/tr?id=META_PIXEL_ID&ev=PageView&noscript=1" alt="">
+             src="https://www.facebook.com/tr?id=1290731092392108&ev=PageView&noscript=1" alt="">
     </noscript>
     <!-- ============================================================ -->
 
