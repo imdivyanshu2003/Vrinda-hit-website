@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your website is being built — Vrinda Hit</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="favicon.png" type="image/png">
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<style>
+    :root { --p:#7C3AED; --a:#EC4899; --bg:#0F0B1E; --card:#1A1530; --text:#F5F3FF; --muted:#A5A0B8; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Inter','Outfit',system-ui,sans-serif; background:radial-gradient(ellipse at top,#2A1550 0%,var(--bg) 60%); color:var(--text); min-height:100vh; padding:24px 16px; }
+    .wrap { max-width:720px; margin:0 auto; }
+    .logo { text-align:center; font-weight:700; font-size:20px; margin-bottom:24px; }
+    .logo i { color:var(--a); margin-right:6px; }
+    .card { background:var(--card); border:1px solid rgba(255,255,255,.08); border-radius:20px; padding:28px; box-shadow:0 20px 60px rgba(0,0,0,.4); }
+    .status-head { display:flex; align-items:center; gap:14px; margin-bottom:20px; }
+    .status-icon { width:56px; height:56px; border-radius:50%; display:grid; place-items:center; font-size:28px; flex-shrink:0; }
+    .status-icon.loading { background:rgba(124,58,237,.15); color:var(--p); }
+    .status-icon.success { background:rgba(16,185,129,.15); color:#10B981; }
+    .status-icon.error   { background:rgba(239,68,68,.15); color:#EF4444; }
+    .status-icon .spin { animation:spin 1.2s linear infinite; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    .status-title { font-size:22px; font-weight:700; line-height:1.3; }
+    .status-sub { color:var(--muted); font-size:14px; margin-top:4px; }
+    .progress-bar { height:6px; background:rgba(255,255,255,.06); border-radius:3px; overflow:hidden; margin:16px 0 20px; }
+    .progress-fill { height:100%; background:linear-gradient(90deg,var(--p),var(--a)); width:0%; transition:width .6s ease; }
+    .step-list { list-style:none; display:flex; flex-direction:column; gap:10px; font-size:14px; }
+    .step-list li { display:flex; align-items:center; gap:10px; color:var(--muted); }
+    .step-list li.done { color:var(--text); }
+    .step-list li.done i { color:#10B981; }
+    .step-list li.active { color:var(--text); }
+    .step-list li.active i { color:var(--p); animation:spin 1s linear infinite; }
+    .preview-frame { margin-top:20px; border:1px solid rgba(255,255,255,.1); border-radius:14px; overflow:hidden; background:#fff; height:460px; }
+    .preview-frame iframe { width:100%; height:100%; border:0; display:block; }
+    .actions { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:18px; }
+    .actions.single { grid-template-columns:1fr; }
+    .btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:14px 18px; border-radius:12px; font-weight:600; font-size:15px; text-decoration:none; border:0; cursor:pointer; transition:transform .2s; }
+    .btn:active { transform:scale(.98); }
+    .btn-primary { background:linear-gradient(135deg,var(--p),var(--a)); color:#fff; }
+    .btn-wa { background:#25D366; color:#fff; }
+    .btn-ghost { background:rgba(255,255,255,.06); color:var(--text); border:1px solid rgba(255,255,255,.12); }
+    .url-box { margin-top:14px; padding:12px 14px; background:rgba(0,0,0,.25); border:1px solid rgba(255,255,255,.08); border-radius:10px; display:flex; align-items:center; gap:10px; font-family:ui-monospace,monospace; font-size:13px; color:var(--muted); }
+    .url-box a { color:var(--text); word-break:break-all; text-decoration:none; }
+    .url-box a:hover { color:var(--a); }
+    .error-detail { margin-top:12px; padding:12px; background:rgba(239,68,68,.08); border:1px solid rgba(239,68,68,.3); border-radius:10px; font-size:13px; color:#FCA5A5; }
+    .hint { text-align:center; color:var(--muted); font-size:13px; margin-top:16px; }
+    @media (max-width:520px){ .preview-frame{height:380px;} .actions{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+    <div class="logo"><i class="ph-fill ph-sparkle"></i> Vrinda Hit</div>
+
+    <div class="card" id="main-card">
+        <div class="status-head">
+            <div class="status-icon loading" id="icon"><i class="ph ph-circle-notch spin"></i></div>
+            <div>
+                <div class="status-title" id="title">Confirming your payment…</div>
+                <div class="status-sub" id="sub">This usually takes 5-10 seconds.</div>
+            </div>
+        </div>
+
+        <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+
+        <ul class="step-list" id="steps">
+            <li data-step="payment" class="active"><i class="ph ph-circle-notch"></i> Verifying payment with Cashfree</li>
+            <li data-step="queued"><i class="ph ph-circle"></i> Brief locked in</li>
+            <li data-step="generating"><i class="ph ph-circle"></i> AI writing your website (45-60s)</li>
+            <li data-step="publishing"><i class="ph ph-circle"></i> Publishing to vrindahitwebsite.com</li>
+        </ul>
+
+        <div id="result-area" style="display:none;">
+            <div class="preview-frame"><iframe id="site-frame" title="Your site"></iframe></div>
+            <div class="url-box">
+                <i class="ph ph-link"></i>
+                <a id="site-url" target="_blank" rel="noopener"></a>
+            </div>
+            <div class="actions">
+                <a id="open-site" class="btn btn-primary" target="_blank" rel="noopener"><i class="ph-fill ph-arrow-square-out"></i> Open full site</a>
+                <a id="wa-btn" class="btn btn-wa" target="_blank" rel="noopener"><i class="ph-fill ph-whatsapp-logo"></i> Share on WhatsApp</a>
+            </div>
+            <div class="hint">Want changes? <a href="#" id="wa-edit" style="color:var(--a);">Message us</a> — free revisions included.</div>
+        </div>
+
+        <div id="error-area" style="display:none;">
+            <div class="error-detail" id="error-msg"></div>
+            <div class="actions single">
+                <a id="wa-help" class="btn btn-wa" target="_blank" rel="noopener"><i class="ph-fill ph-whatsapp-logo"></i> Contact us — we'll fix it</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+(function(){
+    const WHATSAPP = '917505483523';
+    const params = new URLSearchParams(location.search);
+    const orderId = params.get('order');
+    if (!orderId) {
+        document.getElementById('title').textContent = 'Missing order ID';
+        document.getElementById('sub').textContent = 'Please use the link from your payment confirmation.';
+        setIcon('error');
+        return;
+    }
+
+    const $ = id => document.getElementById(id);
+    const iconEl = $('icon'), titleEl = $('title'), subEl = $('sub'), progressEl = $('progress');
+    let triggered = false;
+
+    function setStep(step, state) {
+        document.querySelectorAll('#steps li').forEach(li => {
+            li.classList.remove('active');
+            const s = li.dataset.step;
+            if (s === step) {
+                li.classList.add(state || 'active');
+                const i = li.querySelector('i');
+                if (state === 'done') i.className = 'ph-fill ph-check-circle';
+                else i.className = 'ph ph-circle-notch';
+            }
+        });
+    }
+    function markDone(step) {
+        const li = document.querySelector(`#steps li[data-step="${step}"]`);
+        if (!li) return;
+        li.classList.add('done'); li.classList.remove('active');
+        const i = li.querySelector('i');
+        i.className = 'ph-fill ph-check-circle';
+    }
+    function setIcon(kind){
+        iconEl.className = 'status-icon ' + kind;
+        if (kind === 'success') iconEl.innerHTML = '<i class="ph-fill ph-check-circle"></i>';
+        else if (kind === 'error') iconEl.innerHTML = '<i class="ph-fill ph-warning-circle"></i>';
+        else iconEl.innerHTML = '<i class="ph ph-circle-notch spin"></i>';
+    }
+    function setProgress(pct){ progressEl.style.width = pct + '%'; }
+
+    function showSuccess(url) {
+        setIcon('success');
+        titleEl.textContent = '🎉 Your website is live!';
+        subEl.textContent = 'Share it anywhere — it\'s already indexed.';
+        setProgress(100);
+        ['payment','queued','generating','publishing'].forEach(markDone);
+
+        $('result-area').style.display = 'block';
+        $('site-frame').src = url;
+        $('site-url').textContent = url;
+        $('site-url').href = url;
+        $('open-site').href = url;
+        const msg = encodeURIComponent(`Check out my new website: ${url}`);
+        $('wa-btn').href = `https://wa.me/?text=${msg}`;
+        $('wa-edit').href = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(`Hi! I just got my site ${url} — I\'d like to request a small change.`)}`;
+
+        try { if (window.fbq) window.fbq('track','Purchase'); } catch(e){}
+    }
+
+    function showError(msg) {
+        setIcon('error');
+        titleEl.textContent = 'Something went wrong';
+        subEl.textContent = 'Don\'t worry — your payment is safe. We\'ll fix this in minutes.';
+        $('error-area').style.display = 'block';
+        $('error-msg').textContent = msg;
+        $('wa-help').href = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(`Hi! My order ${orderId} had an issue: ${msg}`)}`;
+    }
+
+    async function fetchOrder() {
+        const r = await fetch(`/api/order/${orderId}`);
+        return r.json();
+    }
+    async function triggerGenerate() {
+        const r = await fetch('/api/trigger-generate', {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({ orderId })
+        });
+        return r.json();
+    }
+
+    let pollCount = 0;
+    const MAX_POLLS = 90; // 90 × 2s = 3 minutes
+    async function poll() {
+        pollCount++;
+        try {
+            const o = await fetchOrder();
+            if (!o.ok) { showError(o.error || 'Order not found'); return; }
+
+            if (o.status === 'pending') {
+                setProgress(10 + Math.min(15, pollCount));
+                if (pollCount > 20) {
+                    // Webhook slow — try direct fallback via trigger (which checks Cashfree API)
+                    if (!triggered) {
+                        triggered = true;
+                        triggerGenerate().then(handleTriggerResult).catch(()=>{});
+                    }
+                }
+            } else if (o.status === 'paid') {
+                markDone('payment'); setStep('queued','active'); setProgress(30);
+                setTimeout(() => { markDone('queued'); setStep('generating','active'); setProgress(45); }, 400);
+                titleEl.textContent = 'Payment confirmed. Generating your site…';
+                subEl.textContent = 'AI is writing your HTML now. This takes 45-60 seconds.';
+                if (!triggered) {
+                    triggered = true;
+                    triggerGenerate().then(handleTriggerResult).catch(e => showError(e.message));
+                }
+                setProgress(Math.min(85, 45 + pollCount * 2));
+            } else if (o.status === 'generated' && o.url) {
+                markDone('generating'); setStep('publishing','active'); setProgress(95);
+                setTimeout(() => showSuccess(o.url), 500);
+                return; // stop polling
+            } else if (o.status === 'failed') {
+                showError(o.error || 'Payment failed. Please try again.');
+                return;
+            }
+
+            if (pollCount < MAX_POLLS) setTimeout(poll, 2000);
+            else showError('Still processing after 3 minutes. We\'ll WhatsApp you the link within the hour.');
+        } catch (e) {
+            if (pollCount < MAX_POLLS) setTimeout(poll, 3000);
+            else showError('Network error. Please refresh.');
+        }
+    }
+
+    function handleTriggerResult(r) {
+        if (r.ok && r.url) {
+            // Polling will pick up the generated state on next tick
+        } else if (r.error) {
+            // Don't show error immediately — webhook might still succeed; log only
+            console.warn('[trigger] deferred error:', r);
+        }
+    }
+
+    poll();
+})();
+</script>
+</body>
+</html>

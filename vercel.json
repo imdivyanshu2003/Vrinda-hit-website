@@ -2,12 +2,29 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "rewrites": [
     { "source": "/s/:slug", "destination": "/api/site/:slug" },
-    { "source": "/s/:slug/", "destination": "/api/site/:slug" }
+    { "source": "/s/:slug/", "destination": "/api/site/:slug" },
+    { "source": "/success", "destination": "/success.html" }
   ],
   "functions": {
     "api/generate.js": {
       "maxDuration": 60,
       "memory": 1024
+    },
+    "api/trigger-generate.js": {
+      "maxDuration": 60,
+      "memory": 1024
+    },
+    "api/cashfree/create-order.js": {
+      "maxDuration": 15,
+      "memory": 512
+    },
+    "api/cashfree/webhook.js": {
+      "maxDuration": 15,
+      "memory": 512
+    },
+    "api/order/[id].js": {
+      "maxDuration": 10,
+      "memory": 256
     },
     "api/site/[slug].js": {
       "maxDuration": 10,

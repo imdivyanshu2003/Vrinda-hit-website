@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pricing & Services — Vrinda Hit Website</title>
+<meta name="description" content="Transparent pricing in INR for AI-generated websites. Basic Rs.299, Premium Rs.999, Pro Rs.1999. All plans include hosting, delivery in 60 seconds, and support.">
+<link rel="icon" href="Vrinda-Hit-Website-logo.jpeg" type="image/jpeg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Inter',system-ui,sans-serif;background:#FAFAFC;color:#1E1B4B;line-height:1.65}
+    .topnav{background:#fff;border-bottom:1px solid #E5E7EB;padding:18px 24px;position:sticky;top:0;z-index:10}
+    .topnav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+    .logo{display:flex;align-items:center;gap:10px;font-family:'Outfit',sans-serif;font-weight:800;font-size:18px;text-decoration:none;color:inherit}
+    .logo img{width:32px;height:32px;border-radius:8px;object-fit:cover}
+    .topnav a{color:#6B7280;text-decoration:none;font-size:14px;font-weight:500;margin-left:18px}
+    .topnav a:hover{color:#7C3AED}
+    .hero{max-width:900px;margin:0 auto;padding:56px 24px 24px;text-align:center}
+    h1{font-family:'Outfit',sans-serif;font-size:46px;font-weight:800;margin-bottom:14px;background:linear-gradient(135deg,#7C3AED,#EC4899);-webkit-background-clip:text;background-clip:text;color:transparent}
+    .lead{font-size:18px;color:#6B7280;max-width:640px;margin:0 auto 12px}
+    .currency-note{display:inline-flex;align-items:center;gap:6px;background:#EFF6FF;color:#1E40AF;padding:6px 14px;border-radius:999px;font-size:13px;font-weight:600;margin-top:8px}
+    .wrap{max-width:1100px;margin:0 auto;padding:24px 24px 64px}
+    .plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-top:24px}
+    .plan{background:#fff;border:2px solid #E5E7EB;border-radius:20px;padding:28px;position:relative;display:flex;flex-direction:column;transition:transform .2s,box-shadow .2s}
+    .plan:hover{transform:translateY(-4px);box-shadow:0 20px 40px rgba(124,58,237,.1)}
+    .plan.featured{border-color:#7C3AED;box-shadow:0 20px 40px rgba(124,58,237,.12)}
+    .plan-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#7C3AED,#EC4899);color:#fff;padding:5px 14px;border-radius:999px;font-size:12px;font-weight:700;letter-spacing:.5px}
+    .plan-name{font-family:'Outfit',sans-serif;font-size:22px;font-weight:700;margin-bottom:6px}
+    .plan-desc{color:#6B7280;font-size:14px;margin-bottom:16px;min-height:42px}
+    .plan-price{font-family:'Outfit',sans-serif;font-size:42px;font-weight:800;color:#1E1B4B;margin-bottom:4px}
+    .plan-price .currency{font-size:26px;font-weight:600;color:#7C3AED;vertical-align:top}
+    .plan-price .unit{font-size:15px;font-weight:500;color:#6B7280;margin-left:4px}
+    .plan-tax{font-size:12px;color:#9CA3AF;margin-bottom:20px}
+    .plan-features{list-style:none;padding:0;margin:0 0 24px;flex:1}
+    .plan-features li{display:flex;align-items:flex-start;gap:10px;padding:8px 0;font-size:14px;color:#374151}
+    .plan-features li i{color:#10B981;font-size:18px;flex-shrink:0;margin-top:1px}
+    .plan-cta{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 22px;border-radius:12px;text-decoration:none;font-weight:600;font-size:15px;background:#F3F4F6;color:#1E1B4B}
+    .plan-cta:hover{background:#E5E7EB}
+    .plan.featured .plan-cta{background:linear-gradient(135deg,#7C3AED,#EC4899);color:#fff}
+    .plan.featured .plan-cta:hover{filter:brightness(1.08)}
+    h2{font-family:'Outfit',sans-serif;font-size:28px;font-weight:700;margin:48px 0 16px;text-align:center}
+    .faq{max-width:780px;margin:32px auto 0}
+    .faq details{background:#fff;border:1px solid #E5E7EB;border-radius:12px;padding:16px 20px;margin-bottom:10px}
+    .faq summary{font-weight:600;cursor:pointer;font-size:15px}
+    .faq p{margin-top:10px;color:#6B7280;font-size:14px}
+    .gst-note{max-width:780px;margin:24px auto;background:#FEF3C7;border-left:4px solid #F59E0B;padding:14px 18px;border-radius:8px;font-size:14px;color:#78350F}
+    footer{border-top:1px solid #E5E7EB;padding:24px;background:#fff;text-align:center;color:#6B7280;font-size:14px;margin-top:48px}
+    footer a{color:#7C3AED;text-decoration:none;margin:0 10px}
+    @media(max-width:600px){h1{font-size:34px}.plan-price{font-size:36px}}
+</style>
+</head>
+<body>
+<nav class="topnav">
+    <div class="topnav-inner">
+        <a href="/" class="logo"><img src="Vrinda-Hit-Website-logo.jpeg" alt="Vrinda Hit"> Vrinda Hit Website</a>
+        <div><a href="/">Home</a><a href="/contact.html">Contact</a><a href="/terms.html">Terms</a><a href="/refunds.html">Refunds</a><a href="/privacy.html">Privacy</a></div>
+    </div>
+</nav>
+
+<section class="hero">
+    <h1>Pricing &amp; Services</h1>
+    <p class="lead">Pick a plan. Pay securely with UPI, cards, or net-banking. Your AI-generated website goes live in 60 seconds.</p>
+    <div class="currency-note"><i class="ph-fill ph-currency-inr"></i> All prices in Indian Rupees (INR). Taxes included where applicable.</div>
+</section>
+
+<div class="wrap">
+    <div class="plans">
+
+        <div class="plan" id="basic">
+            <div class="plan-name">Basic</div>
+            <div class="plan-desc">Clean single-page site for beginners, side projects, and simple landing pages.</div>
+            <div class="plan-price"><span class="currency">&#8377;</span>299 <span class="unit">one-time</span></div>
+            <div class="plan-tax">Inclusive of all taxes</div>
+            <ul class="plan-features">
+                <li><i class="ph-fill ph-check-circle"></i> AI-generated single-page website</li>
+                <li><i class="ph-fill ph-check-circle"></i> 4 core sections (hero, services, about, CTA)</li>
+                <li><i class="ph-fill ph-check-circle"></i> Mobile-responsive design</li>
+                <li><i class="ph-fill ph-check-circle"></i> Hosted on vrindahitwebsite.com/s/your-brand</li>
+                <li><i class="ph-fill ph-check-circle"></i> WhatsApp click-to-chat CTA</li>
+                <li><i class="ph-fill ph-check-circle"></i> Live in 60 seconds after payment</li>
+                <li><i class="ph-fill ph-check-circle"></i> 1 round of minor revisions</li>
+                <li><i class="ph-fill ph-check-circle"></i> Email/WhatsApp support</li>
+            </ul>
+            <a href="/#builder" class="plan-cta"><i class="ph-fill ph-rocket-launch"></i> Start with Basic</a>
+        </div>
+
+        <div class="plan featured" id="premium">
+            <div class="plan-badge">MOST POPULAR</div>
+            <div class="plan-name">Premium</div>
+            <div class="plan-desc">Best-selling plan. Full-featured site with animations, testimonials, and SEO.</div>
+            <div class="plan-price"><span class="currency">&#8377;</span>999 <span class="unit">one-time</span></div>
+            <div class="plan-tax">Inclusive of all taxes</div>
+            <ul class="plan-features">
+                <li><i class="ph-fill ph-check-circle"></i> Everything in Basic, plus:</li>
+                <li><i class="ph-fill ph-check-circle"></i> 7 full sections incl. testimonials &amp; FAQ</li>
+                <li><i class="ph-fill ph-check-circle"></i> Subtle animations &amp; hover effects</li>
+                <li><i class="ph-fill ph-check-circle"></i> SEO meta tags + Open Graph setup</li>
+                <li><i class="ph-fill ph-check-circle"></i> Google Fonts + Phosphor Icons</li>
+                <li><i class="ph-fill ph-check-circle"></i> Removable "Vrinda Hit" footer credit</li>
+                <li><i class="ph-fill ph-check-circle"></i> 3 rounds of revisions (7 days)</li>
+                <li><i class="ph-fill ph-check-circle"></i> Priority WhatsApp support</li>
+            </ul>
+            <a href="/#builder" class="plan-cta"><i class="ph-fill ph-star"></i> Choose Premium</a>
+        </div>
+
+        <div class="plan" id="pro">
+            <div class="plan-name">Pro</div>
+            <div class="plan-desc">Full business presence with your own .com domain. For serious creators &amp; founders.</div>
+            <div class="plan-price"><span class="currency">&#8377;</span>1,999 <span class="unit">one-time</span></div>
+            <div class="plan-tax">Inclusive of all taxes (domain cost extra, at registrar)</div>
+            <ul class="plan-features">
+                <li><i class="ph-fill ph-check-circle"></i> Everything in Premium, plus:</li>
+                <li><i class="ph-fill ph-check-circle"></i> 8 sections incl. gallery &amp; newsletter</li>
+                <li><i class="ph-fill ph-check-circle"></i> Custom .com / .in domain setup</li>
+                <li><i class="ph-fill ph-check-circle"></i> Free SSL certificate (HTTPS)</li>
+                <li><i class="ph-fill ph-check-circle"></i> Google Search Console setup</li>
+                <li><i class="ph-fill ph-check-circle"></i> Unlimited revisions for 14 days</li>
+                <li><i class="ph-fill ph-check-circle"></i> 1-on-1 WhatsApp consultation call</li>
+                <li><i class="ph-fill ph-check-circle"></i> 6 months free hosting included</li>
+            </ul>
+            <a href="/#builder" class="plan-cta"><i class="ph-fill ph-crown"></i> Choose Pro</a>
+        </div>
+    </div>
+
+    <div class="gst-note">
+        <strong>GST Note:</strong> All prices listed above are inclusive of applicable taxes. A GST invoice can be issued on request at clarifypathsupport@gmail.com with your GSTIN details.
+    </div>
+
+    <h2>Products &amp; Services at a Glance</h2>
+    <div style="max-width:780px;margin:0 auto;background:#fff;border:1px solid #E5E7EB;border-radius:16px;overflow:hidden">
+        <table style="width:100%;border-collapse:collapse;font-size:14px">
+            <thead style="background:#F9FAFB">
+                <tr>
+                    <th style="text-align:left;padding:14px 18px;font-weight:600;color:#6B7280">Service</th>
+                    <th style="text-align:left;padding:14px 18px;font-weight:600;color:#6B7280">Description</th>
+                    <th style="text-align:right;padding:14px 18px;font-weight:600;color:#6B7280">Price (INR)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="border-top:1px solid #E5E7EB"><td style="padding:14px 18px">Basic Website</td><td style="padding:14px 18px;color:#6B7280">4-section AI-generated single-page site on subdomain</td><td style="padding:14px 18px;text-align:right;font-weight:600">&#8377; 299</td></tr>
+                <tr style="border-top:1px solid #E5E7EB"><td style="padding:14px 18px">Premium Website</td><td style="padding:14px 18px;color:#6B7280">7-section site with animations, SEO, testimonials</td><td style="padding:14px 18px;text-align:right;font-weight:600">&#8377; 999</td></tr>
+                <tr style="border-top:1px solid #E5E7EB"><td style="padding:14px 18px">Pro Website</td><td style="padding:14px 18px;color:#6B7280">8-section site + custom .com domain + SSL + SEO</td><td style="padding:14px 18px;text-align:right;font-weight:600">&#8377; 1,999</td></tr>
+                <tr style="border-top:1px solid #E5E7EB"><td style="padding:14px 18px">Extra Revision Round</td><td style="padding:14px 18px;color:#6B7280">Post-delivery design/copy change beyond included rounds</td><td style="padding:14px 18px;text-align:right;font-weight:600">&#8377; 199</td></tr>
+                <tr style="border-top:1px solid #E5E7EB"><td style="padding:14px 18px">Additional Section</td><td style="padding:14px 18px;color:#6B7280">Add an extra section (e.g. blog, gallery) to existing site</td><td style="padding:14px 18px;text-align:right;font-weight:600">&#8377; 299</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq">
+        <details open>
+            <summary>How quickly will my website be delivered?</summary>
+            <p>Basic and Premium sites go live within 60 seconds of successful payment. Pro plan custom-domain setup takes up to 24 business hours after you share domain credentials.</p>
+        </details>
+        <details>
+            <summary>What payment methods are accepted?</summary>
+            <p>All payments are processed securely through Cashfree Payments. We accept UPI (GPay, PhonePe, Paytm, BHIM), all major credit/debit cards (Visa, Mastercard, RuPay, Amex), net-banking for 60+ Indian banks, and mobile wallets.</p>
+        </details>
+        <details>
+            <summary>Are there any hidden or recurring charges?</summary>
+            <p>No. All prices are one-time payments. There are no subscription fees, no hidden taxes, no renewal charges for Basic and Premium plans. For the Pro plan, the custom domain renewal (typically &#8377;800/year) is billed directly by your domain registrar, not us.</p>
+        </details>
+        <details>
+            <summary>Can I get a refund?</summary>
+            <p>Yes, please see our <a href="/refunds.html" style="color:#7C3AED">Refund &amp; Cancellation Policy</a> for full details on when refunds apply.</p>
+        </details>
+        <details>
+            <summary>Do you issue GST invoices?</summary>
+            <p>Yes, upon request. Email <a href="mailto:clarifypathsupport@gmail.com" style="color:#7C3AED">clarifypathsupport@gmail.com</a> with your order ID and GSTIN, and we'll issue a proper GST invoice within 2 business days.</p>
+        </details>
+        <details>
+            <summary>Who owns the generated website?</summary>
+            <p>You own a perpetual, non-exclusive license to the generated content and may use it freely for your own purposes. See our <a href="/terms.html" style="color:#7C3AED">Terms</a> for full details.</p>
+        </details>
+    </div>
+</div>
+
+<footer>
+    <div>&copy; 2026 Vrinda Hit Website. All rights reserved.</div>
+    <div style="margin-top:10px">
+        <a href="/">Home</a> &middot; <a href="/pricing.html">Pricing</a> &middot; <a href="/contact.html">Contact</a> &middot; <a href="/terms.html">Terms</a> &middot; <a href="/refunds.html">Refunds</a> &middot; <a href="/privacy.html">Privacy</a>
+    </div>
+</footer>
+</body>
+</html>

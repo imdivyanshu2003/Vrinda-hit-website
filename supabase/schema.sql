@@ -52,8 +52,10 @@ create table if not exists public.orders (
     phone                text,
     razorpay_order_id    text unique,
     razorpay_payment_id  text,
+    cashfree_order_id    text unique,            -- we set this = orders.id for 1:1 mapping
+    cashfree_payment_id  text,
     error_message        text,
-    source               text,                   -- e.g. 'razorpay' | 'whatsapp_manual' | 'test'
+    source               text,                   -- e.g. 'cashfree' | 'razorpay' | 'whatsapp_manual' | 'test'
     created_at           timestamptz default now(),
     updated_at           timestamptz default now()
 );
@@ -105,3 +107,7 @@ alter table public.orders enable row level security;
 --    File size limit: 5 MB (default is fine)
 --
 -- No policies needed because API uses the service role key.
+
+-- =============== MIGRATION (run if you already deployed the old schema) ===============
+alter table public.orders add column if not exists cashfree_order_id   text unique;
+alter table public.orders add column if not exists cashfree_payment_id text;

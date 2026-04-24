@@ -91,6 +91,8 @@
         rel="stylesheet">
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- Cashfree Payments SDK v3 -->
+    <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
     <link rel="stylesheet" href="styles.css">
 
     <!-- Vercel Web Analytics -->
@@ -588,10 +590,13 @@
                     <input type="email" id="email-input" class="builder-input" placeholder="Your email" required>
                     <input type="tel" id="phone-input" class="builder-input" placeholder="WhatsApp number (with country code)" required>
                     <div class="plan-summary" id="plan-summary"></div>
-                    <a href="#" id="claim-btn" class="btn-whatsapp btn-large claim-cta" target="_blank">
-                        <i class="ph-fill ph-whatsapp-logo"></i> Claim My Website Now
+                    <button type="button" id="claim-btn" class="btn-whatsapp btn-large claim-cta" style="background:linear-gradient(135deg,#7C3AED,#EC4899);">
+                        <i class="ph-fill ph-lock-simple"></i> Pay Securely & Get My Website
+                    </button>
+                    <a href="#" id="claim-wa-fallback" class="btn-whatsapp btn-large" target="_blank" style="display:none;margin-top:10px;">
+                        <i class="ph-fill ph-whatsapp-logo"></i> WhatsApp us instead
                     </a>
-                    <p class="claim-hint"><i class="ph-fill ph-shield-check"></i> Opens WhatsApp with all your details pre-filled. We reach out within minutes.</p>
+                    <p class="claim-hint"><i class="ph-fill ph-shield-check"></i> Secure payment via Cashfree. Site goes live in 60 seconds after payment. UPI / Cards / Netbanking accepted.</p>
                     <div class="screen-actions">
                         <button type="button" class="btn-builder-ghost" data-action="back-to-pricing">
                             <i class="ph ph-arrow-left"></i> Change plan
@@ -930,12 +935,19 @@
             </div>
             <nav class="footer-nav" aria-label="Footer">
                 <a href="#showcase">Demo</a>
-                <a href="#builder">Pricing</a>
+                <a href="/pricing.html">Pricing</a>
                 <a href="#faq">FAQ</a>
                 <a href="/blog/">Blog</a>
                 <a href="https://wa.me/917505483523" target="_blank" rel="noopener">WhatsApp</a>
             </nav>
             <p class="footer-tagline">Affordable website design in India. Turn your idea into a live website in 24 hours — for creators, coaches, spiritual pages, dietitians & small businesses.</p>
+            <nav class="footer-nav" aria-label="Legal" style="margin-top:10px;font-size:13px;">
+                <a href="/contact.html">Contact Us</a>
+                <a href="/terms.html">Terms &amp; Conditions</a>
+                <a href="/refunds.html">Refunds &amp; Cancellations</a>
+                <a href="/privacy.html">Privacy Policy</a>
+            </nav>
+            <p style="margin-top:14px;font-size:13px;color:#9CA3AF;">Operated by Divyanshu Sharma &middot; Meerut, Uttar Pradesh, India &middot; <a href="mailto:clarifypathsupport@gmail.com" style="color:#9CA3AF;">clarifypathsupport@gmail.com</a></p>
             <p>&copy; 2026 Vrinda Hit Website. All rights reserved.</p>
         </div>
     </footer>

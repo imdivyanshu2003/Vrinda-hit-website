@@ -466,11 +466,13 @@
         goTo('contact');
     }
 
-    // -------- Final claim (WhatsApp pre-fill) --------
+    // -------- Final claim (Cashfree checkout) --------
     function bindClaimButton() {
         const claimBtn = document.getElementById('claim-btn');
         if (!claimBtn) return;
-        claimBtn.addEventListener('click', (e) => {
+        claimBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+
             const emailEl = document.getElementById('email-input');
             const phoneEl = document.getElementById('phone-input');
             const email = (emailEl.value || '').trim();
@@ -479,39 +481,70 @@
             const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
             const phoneOk = phone.replace(/\D/g, '').length >= 10;
 
-            if (!emailOk) { emailEl.focus(); shake(emailEl); e.preventDefault(); return; }
-            if (!phoneOk) { phoneEl.focus(); shake(phoneEl); e.preventDefault(); return; }
+            if (!emailOk) { emailEl.focus(); shake(emailEl); return; }
+            if (!phoneOk) { phoneEl.focus(); shake(phoneEl); return; }
 
             state.email = email;
             state.phone = phone;
 
-            const theme = THEMES[state.theme];
-            const plan = PLANS[state.plan];
-            const brandName = state.brand || craftBrandName(state.idea, theme);
-
-            const message =
-                `Hello Vrinda Hit! 🙏 I just built my preview on vrindahitwebsite.com ✨\n\n` +
-                `*Brand:* ${brandName}\n` +
-                `*Idea:* ${state.idea}\n` +
-                `*Theme:* ${theme.label}\n` +
-                `*Style:* ${capitalize(state.style)} + ${capitalize(state.palette)} palette\n` +
-                `*Plan:* ${plan.label} (₹${plan.price})\n` +
-                `*Email:* ${email}\n` +
-                `*WhatsApp:* ${phone}\n\n` +
-                `I'd like to claim my website and get it delivered in 24 hours!`;
-
-            claimBtn.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-
-            // Fire conversion events (Lead for Meta, purchase-intent for GA4)
+            // Lead tracking BEFORE payment
             track('Lead', { plan: state.plan, value: PLANS[state.plan].price, currency: 'INR' });
-            try { if (window.fbq) window.fbq('track', 'Lead', { value: PLANS[state.plan].price, currency: 'INR' }); } catch (e) {}
-            track('claim_whatsapp', { plan: state.plan, theme: state.theme, style: state.style });
+            try { if (window.fbq) window.fbq('track', 'Lead', { value: PLANS[state.plan].price, currency: 'INR' }); } catch (err) {}
+            track('claim_pay_click', { plan: state.plan, theme: state.theme, style: state.style });
 
-            // Show success screen after a short delay (WhatsApp takes over)
-            setTimeout(() => {
-                renderSuccess();
-                goTo('success');
-            }, 700);
+            // Disable button + show loading
+            const originalText = claimBtn.innerHTML;
+            claimBtn.disabled = true;
+            claimBtn.innerHTML = '<i class="ph ph-circle-notch" style="animation:spin 1s linear infinite"></i> Creating order...';
+
+            try {
+                const resp = await fetch('/api/cashfree/create-order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        idea: state.idea, brand: state.brand,
+                        theme: state.theme, style: state.style, palette: state.palette,
+                        plan: state.plan, email, phone
+                    })
+                });
+                const data = await resp.json();
+                if (!resp.ok || !data.paymentSessionId) {
+                    throw new Error(data.error || 'Could not create order');
+                }
+
+                try { if (window.fbq) window.fbq('track', 'InitiateCheckout', { value: PLANS[state.plan].price, currency: 'INR' }); } catch (err) {}
+
+                // Persist order ID locally in case user closes tab
+                try { localStorage.setItem('vrindaLastOrder', data.orderId); } catch (err) {}
+
+                // Cashfree v3 Drop checkout. SDK is loaded on index.html.
+                if (!window.Cashfree) throw new Error('Payment SDK not loaded');
+                const cf = window.Cashfree({ mode: data.mode === 'production' ? 'production' : 'sandbox' });
+                cf.checkout({
+                    paymentSessionId: data.paymentSessionId,
+                    redirectTarget: '_self'   // → returns to /success?order=...
+                });
+            } catch (err) {
+                console.error(err);
+                claimBtn.disabled = false;
+                claimBtn.innerHTML = originalText;
+                alert('Payment initialisation failed: ' + err.message + '\n\nPlease try again or WhatsApp us.');
+
+                // Fallback: let them WhatsApp us manually
+                const theme = THEMES[state.theme];
+                const plan = PLANS[state.plan];
+                const brandName = state.brand || craftBrandName(state.idea, theme);
+                const message =
+                    `Hello Vrinda Hit! I want to buy the ${plan.label} plan.\n\n` +
+                    `*Brand:* ${brandName}\n*Idea:* ${state.idea}\n` +
+                    `*Theme:* ${theme.label}\n*Style:* ${capitalize(state.style)} + ${capitalize(state.palette)}\n` +
+                    `*Email:* ${email}\n*Phone:* ${phone}\n\nPayment page had an issue. Please help.`;
+                const waLink = document.getElementById('claim-wa-fallback');
+                if (waLink) {
+                    waLink.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+                    waLink.style.display = 'inline-flex';
+                }
+            }
         });
     }
 
