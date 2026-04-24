@@ -186,9 +186,13 @@ export default async function handler(req, res) {
 
     try {
         const startedAt = Date.now();
+        // Model is configurable via env var so we can switch without redeploying code.
+        // Defaults to Haiku 4.5 — fast (15-25s), cheap (~₹3/site), great for HTML gen.
+        // Swap to 'claude-sonnet-4-5' when on Vercel Pro (300s timeout) for polish upgrade.
+        const model = process.env.ANTHROPIC_MODEL || 'claude-haiku-4-5';
         const message = await client.messages.create({
-            model: 'claude-sonnet-4-5',
-            max_tokens: 8000,
+            model,
+            max_tokens: 7000,
             temperature: 0.7,
             messages: [
                 { role: 'user', content: buildPrompt({ idea, brand, theme, style, palette, plan, email, phone }) }
