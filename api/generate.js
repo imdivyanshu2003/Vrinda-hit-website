@@ -188,7 +188,7 @@ export default async function handler(req, res) {
         const startedAt = Date.now();
         const message = await client.messages.create({
             model: 'claude-sonnet-4-5',
-            max_tokens: 16000,
+            max_tokens: 8000,
             temperature: 0.7,
             messages: [
                 { role: 'user', content: buildPrompt({ idea, brand, theme, style, palette, plan, email, phone }) }

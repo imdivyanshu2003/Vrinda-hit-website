@@ -147,10 +147,16 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
-                const data = await resp.json();
                 const elapsed = ((Date.now() - t0) / 1000).toFixed(1);
+                const rawText = await resp.text();
 
-                if (resp.ok && data.ok) {
+                // Try to parse JSON; if it isn't JSON, the backend crashed
+                // and Vercel returned an HTML error page (most commonly a
+                // 504 timeout or missing env vars).
+                let data = null;
+                try { data = JSON.parse(rawText); } catch (_) {}
+
+                if (resp.ok && data && data.ok) {
                     result.className = 'result show ok';
                     result.innerHTML =
                         `✅ Success in ${elapsed}s\n\n` +
@@ -159,9 +165,22 @@
                         `Tokens: in=${data.meta.tokensIn}, out=${data.meta.tokensOut}\n` +
                         `Size: ${data.meta.sizeKb} KB\n\n` +
                         `<a class="open" href="${data.url}" target="_blank">🚀 Open generated website</a>`;
-                } else {
+                } else if (data) {
                     result.className = 'result show err';
-                    result.textContent = `❌ Error (${resp.status})\n\n` + JSON.stringify(data, null, 2);
+                    result.textContent = `❌ Error (${resp.status}) after ${elapsed}s\n\n` + JSON.stringify(data, null, 2);
+                } else {
+                    // Non-JSON response — show the raw HTML/text
+                    result.className = 'result show err';
+                    let hint = '';
+                    if (resp.status === 504 || elapsed > 55)
+                        hint = '\n\n💡 Looks like a Vercel 60s timeout. Claude took too long. Try again or upgrade to Vercel Pro for 300s.';
+                    else if (resp.status >= 500)
+                        hint = '\n\n💡 Server crashed. Check Vercel → Deployments → latest → Function Logs for the real error.';
+                    result.textContent =
+                        `❌ HTTP ${resp.status} after ${elapsed}s\n` +
+                        `Response was not JSON (likely a Vercel error page).${hint}\n\n` +
+                        `--- Raw response (first 1000 chars) ---\n` +
+                        rawText.slice(0, 1000);
                 }
             } catch (err) {
                 result.className = 'result show err';
