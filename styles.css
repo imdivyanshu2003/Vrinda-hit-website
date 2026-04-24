@@ -2463,6 +2463,69 @@ footer p {
     }
 }
 
+/* ====================
+   STICKY MOBILE CTA BAR (mobile only)
+==================== */
+.sticky-mobile-bar {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    /* Hide the floating WhatsApp bubble on mobile — replaced by the bar */
+    .sticky-whatsapp { display: none; }
+
+    .sticky-mobile-bar {
+        display: flex;
+        position: fixed;
+        bottom: 0; left: 0; right: 0;
+        z-index: 999;
+        padding: 10px 12px;
+        gap: 10px;
+        background: rgba(15, 10, 30, 0.92);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.25);
+        padding-bottom: calc(10px + env(safe-area-inset-bottom));
+    }
+
+    .sticky-mobile-bar > a {
+        flex: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 13px 14px;
+        border-radius: 12px;
+        font-size: 0.95rem;
+        font-weight: 700;
+        text-decoration: none;
+        white-space: nowrap;
+        transition: transform 0.15s ease;
+    }
+    .sticky-mobile-bar > a:active { transform: scale(0.97); }
+
+    .smb-primary {
+        background: linear-gradient(135deg, #7C3AED, #EC4899);
+        color: #fff;
+        box-shadow: 0 6px 18px rgba(124, 58, 237, 0.45);
+        flex: 1.3; /* slightly larger */
+    }
+
+    .smb-secondary {
+        background: #25D366;
+        color: #fff;
+        box-shadow: 0 6px 18px rgba(37, 211, 102, 0.4);
+    }
+
+    /* Add bottom padding to body so the bar never overlaps final content */
+    body { padding-bottom: 68px; }
+}
+
+@media (max-width: 380px) {
+    .sticky-mobile-bar > a { font-size: 0.85rem; padding: 12px 10px; }
+}
+
 @media (min-width: 769px) and (max-width: 1024px) {
     .pricing-grid {
         grid-template-columns: repeat(3, 1fr);

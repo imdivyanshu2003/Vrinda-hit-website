@@ -52,6 +52,49 @@
     <!-- Theme -->
     <meta name="theme-color" content="#7C3AED">
 
+    <!-- ============================================================
+         ANALYTICS & TRACKING
+         ⚠️ REPLACE the two placeholder IDs below with your real IDs:
+            1. GA4_MEASUREMENT_ID → your GA4 ID (format: G-XXXXXXXXXX)
+               Get it from https://analytics.google.com/
+            2. META_PIXEL_ID → your Meta Pixel ID (15–16 digit number)
+               Get it from https://business.facebook.com/events_manager
+         Once you get them, just Find+Replace in this file.
+    ============================================================ -->
+
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA4_MEASUREMENT_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'GA4_MEASUREMENT_ID', { anonymize_ip: true });
+        // Helper: fire as window.trackEvent('name', {params})
+        window.trackEvent = function (name, params) {
+            try { gtag('event', name, params || {}); } catch (e) {}
+            try { if (window.fbq) window.fbq('trackCustom', name, params || {}); } catch (e) {}
+        };
+    </script>
+
+    <!-- Meta Pixel (Facebook / Instagram Ads) -->
+    <script>
+        !function (f, b, e, v, n, t, s) {
+            if (f.fbq) return; n = f.fbq = function () {
+                n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+            };
+            if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
+            n.queue = []; t = b.createElement(e); t.async = !0;
+            t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s)
+        }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', 'META_PIXEL_ID');
+        fbq('track', 'PageView');
+    </script>
+    <noscript>
+        <img height="1" width="1" style="display:none"
+             src="https://www.facebook.com/tr?id=META_PIXEL_ID&ev=PageView&noscript=1" alt="">
+    </noscript>
+    <!-- ============================================================ -->
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -728,69 +771,7 @@
         </div>
     </section>
 
-    <!-- PRICING SECTION -->
-    <section class="pricing-section" id="pricing">
-        <div class="container">
-            <div class="section-heading">
-                <span class="section-tag">Simple Pricing</span>
-                <h2>Choose Your Perfect Plan</h2>
-                <p>No hidden fees. No surprises. Just great websites.</p>
-            </div>
-            <div class="urgency-banner">
-                <i class="ph ph-timer"></i> Limited offer for early users — prices may increase soon!
-            </div>
-            <div class="pricing-grid">
-                <div class="pricing-card">
-                    <div class="plan-name">Basic Plan</div>
-                    <div class="plan-price">&#x20B9;299</div>
-                    <div class="plan-period">one-time</div>
-                    <ul class="plan-features">
-                        <li><i class="ph-fill ph-check-circle"></i> 1-page website</li>
-                        <li><i class="ph-fill ph-check-circle"></i> WhatsApp button</li>
-                        <li><i class="ph-fill ph-check-circle"></i> Basic design</li>
-                        <li><i class="ph-fill ph-check-circle"></i> Mobile optimized</li>
-                    </ul>
-                    <a href="https://wa.me/917505483523?text=Hi,%20I%20want%20the%20Basic%20Plan%20(%E2%82%B9299)"
-                        class="btn-whatsapp btn-plan" target="_blank">
-                        <i class="ph-fill ph-whatsapp-logo"></i> Get Started
-                    </a>
-                </div>
-                <div class="pricing-card popular">
-                    <div class="popular-badge">Most Popular</div>
-                    <div class="plan-name">Premium Plan</div>
-                    <div class="plan-price">&#x20B9;999</div>
-                    <div class="plan-period">one-time</div>
-                    <ul class="plan-features">
-                        <li><i class="ph-fill ph-check-circle"></i> Premium design</li>
-                        <li><i class="ph-fill ph-check-circle"></i> Attractive layout</li>
-                        <li><i class="ph-fill ph-check-circle"></i> WhatsApp integration</li>
-                        <li><i class="ph-fill ph-check-circle"></i> Higher conversion</li>
-                        <li><i class="ph-fill ph-check-circle"></i> Priority support</li>
-                    </ul>
-                    <a href="https://wa.me/917505483523?text=Hi,%20I%20want%20the%20Premium%20Plan%20(%E2%82%B9999)"
-                        class="btn-whatsapp btn-plan" target="_blank">
-                        <i class="ph-fill ph-whatsapp-logo"></i> Get Started
-                    </a>
-                </div>
-                <div class="pricing-card">
-                    <div class="plan-name">Custom Domain</div>
-                    <div class="plan-price">&#x20B9;1999</div>
-                    <div class="plan-period">one-time + yearly renewal</div>
-                    <ul class="plan-features">
-                        <li><i class="ph-fill ph-check-circle"></i> yourname.com domain</li>
-                        <li><i class="ph-fill ph-check-circle"></i> Professional branding</li>
-                        <li><i class="ph-fill ph-check-circle"></i> Premium design included</li>
-                        <li><i class="ph-fill ph-check-circle"></i> SSL certificate</li>
-                        <li><i class="ph-fill ph-check-circle"></i> Full setup done</li>
-                    </ul>
-                    <a href="https://wa.me/917505483523?text=Hi,%20I%20want%20the%20Custom%20Domain%20Plan%20(%E2%82%B91999)"
-                        class="btn-whatsapp btn-plan" target="_blank">
-                        <i class="ph-fill ph-whatsapp-logo"></i> Get Started
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
+    <!-- Standalone pricing section removed — pricing now lives inside the AI Auto-Builder flow (#builder) to avoid duplication. -->
 
     <!-- TESTIMONIALS SECTION -->
     <section class="testimonials-section">
@@ -961,7 +942,7 @@
             </div>
             <nav class="footer-nav" aria-label="Footer">
                 <a href="#showcase">Demo</a>
-                <a href="#pricing">Pricing</a>
+                <a href="#builder">Pricing</a>
                 <a href="#faq">FAQ</a>
                 <a href="/blog/">Blog</a>
                 <a href="https://wa.me/917505483523" target="_blank" rel="noopener">WhatsApp</a>
@@ -974,12 +955,28 @@
     <!-- Builder chatbot script -->
     <script src="/builder.js" defer></script>
 
-    <!-- STICKY WHATSAPP BUTTON -->
+    <!-- STICKY WHATSAPP BUBBLE (desktop + tablet) -->
     <a href="https://wa.me/917505483523?text=Hello,%20I%20want%20to%20get%20my%20website%20created!"
-        class="sticky-whatsapp" target="_blank">
+        class="sticky-whatsapp" target="_blank" rel="noopener"
+        onclick="if(window.trackEvent)window.trackEvent('whatsapp_click',{source:'sticky_bubble'})">
         <i class="ph-fill ph-whatsapp-logo"></i>
         <span>Chat with us</span>
     </a>
+
+    <!-- STICKY MOBILE CTA BAR (mobile only — dual action) -->
+    <div class="sticky-mobile-bar" aria-label="Quick actions">
+        <a href="#builder" class="smb-primary"
+           onclick="if(window.trackEvent)window.trackEvent('sticky_start_preview_click')">
+            <i class="ph-fill ph-sparkle"></i>
+            <span>Try Free Preview</span>
+        </a>
+        <a href="https://wa.me/917505483523?text=Hello,%20I%20want%20to%20get%20my%20website%20created!"
+           class="smb-secondary" target="_blank" rel="noopener"
+           onclick="if(window.trackEvent)window.trackEvent('whatsapp_click',{source:'sticky_mobile_bar'})">
+            <i class="ph-fill ph-whatsapp-logo"></i>
+            <span>WhatsApp</span>
+        </a>
+    </div>
 
 </body>
 

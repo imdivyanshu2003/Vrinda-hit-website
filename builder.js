@@ -157,9 +157,13 @@
         if (paletteSwatch) { selectPalette(paletteSwatch.dataset.palette); return; }
     }
 
+    function track(eventName, params) {
+        try { if (window.trackEvent) window.trackEvent(eventName, params || {}); } catch (e) {}
+    }
+
     function handleAction(action, el) {
         switch (action) {
-            case 'start':           goTo('idea'); break;
+            case 'start':           track('builder_start'); goTo('idea'); break;
             case 'back':            goBack(); break;
             case 'next-idea':       submitIdea(); break;
             case 'generate':        startGeneration(); break;
@@ -219,6 +223,7 @@
 
     // -------- Step 3: Theme --------
     function selectTheme(themeKey) {
+        track('theme_selected', { theme: themeKey });
         state.theme = themeKey;
         state.palette = THEMES[themeKey].defaultPalette; // preselect palette
         document.querySelectorAll('.theme-card').forEach(c => {
@@ -260,6 +265,7 @@
     // -------- Step 5: Loading / Generation --------
     function startGeneration() {
         if (!state.style || !state.palette) return;
+        track('website_generated', { theme: state.theme, style: state.style, palette: state.palette });
         goTo('loading');
         animateGeneration();
     }
@@ -444,6 +450,7 @@
 
     // -------- Pricing / Plan selection --------
     function selectPlan(planKey) {
+        track('plan_selected', { plan: planKey, price: PLANS[planKey].price });
         state.plan = planKey;
         const selectedLabelEl = document.getElementById('selected-plan-label');
         if (selectedLabelEl) selectedLabelEl.textContent = PLANS[planKey].name;
@@ -494,6 +501,11 @@
                 `I'd like to claim my website and get it delivered in 24 hours!`;
 
             claimBtn.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+
+            // Fire conversion events (Lead for Meta, purchase-intent for GA4)
+            track('Lead', { plan: state.plan, value: PLANS[state.plan].price, currency: 'INR' });
+            try { if (window.fbq) window.fbq('track', 'Lead', { value: PLANS[state.plan].price, currency: 'INR' }); } catch (e) {}
+            track('claim_whatsapp', { plan: state.plan, theme: state.theme, style: state.style });
 
             // Show success screen after a short delay (WhatsApp takes over)
             setTimeout(() => {
