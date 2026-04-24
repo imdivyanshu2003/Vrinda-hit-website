@@ -252,7 +252,10 @@
 
         function render() {
             let data;
-            try { data = JSON.parse(sessionStorage.getItem('vrindaBuilderState') || '{}'); } catch (e) { data = {}; }
+            try {
+                data = JSON.parse(localStorage.getItem('vrindaBuilderState')
+                    || sessionStorage.getItem('vrindaBuilderState') || '{}');
+            } catch (e) { data = {}; }
 
             const container = document.getElementById('fp-content');
             if (!data.theme || !data.style || !data.palette) {

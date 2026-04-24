@@ -137,7 +137,7 @@
     }
 
     function persistState() {
-        try { sessionStorage.setItem('vrindaBuilderState', JSON.stringify(state)); } catch (e) {}
+        try { localStorage.setItem('vrindaBuilderState', JSON.stringify(state)); } catch (e) {}
     }
 
     // -------- Click dispatcher --------
