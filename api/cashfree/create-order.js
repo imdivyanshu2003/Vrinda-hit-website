@@ -92,10 +92,16 @@ export default async function handler(req, res) {
             amount
         });
     } catch (err) {
-        console.error('[cashfree.create-order] cashfree failed:', err, err?.detail);
+        console.error('[cashfree.create-order] cashfree failed:', err.message, JSON.stringify(err?.detail));
         await supabase.from('orders')
             .update({ status: 'failed', error_message: err.message, updated_at: new Date().toISOString() })
             .eq('id', orderId);
-        return res.status(502).json({ error: 'Cashfree order creation failed', detail: err.message });
+        // Surface Cashfree's own message + code so the UI can display it
+        const cfMessage = err?.detail?.message || err.message;
+        const cfCode = err?.detail?.code || err?.detail?.type || null;
+        return res.status(502).json({
+            error: 'Cashfree order creation failed',
+            detail: cfMessage + (cfCode ? ` (code: ${cfCode})` : '')
+        });
     }
 }

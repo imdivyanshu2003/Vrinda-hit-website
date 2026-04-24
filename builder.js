@@ -509,7 +509,8 @@
                 });
                 const data = await resp.json();
                 if (!resp.ok || !data.paymentSessionId) {
-                    throw new Error(data.error || 'Could not create order');
+                    const detail = data.detail ? ' — ' + (typeof data.detail === 'string' ? data.detail : JSON.stringify(data.detail)) : '';
+                    throw new Error((data.error || 'Could not create order') + detail);
                 }
 
                 try { if (window.fbq) window.fbq('track', 'InitiateCheckout', { value: PLANS[state.plan].price, currency: 'INR' }); } catch (err) {}
