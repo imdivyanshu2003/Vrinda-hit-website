@@ -1,461 +1,615 @@
-/* =====================================================
-   AI Website Preview Builder — Gamified Lead-Capture Flow
-   Premium chatbot experience with XP, achievements, and
-   immersive website-building animation
-   ===================================================== */
+/* ==================================================================
+   VRINDA HIT — AI Auto-Builder (Preview-first SaaS Flow)
+   Flow: welcome → idea → theme → style → loading → preview+PRD →
+         pricing → contact → success
+   ================================================================== */
 (function () {
     'use strict';
 
-    // Configuration
     const WHATSAPP_NUMBER = '917505483523';
-    const TYPING_DELAY = 800;
-    const STEP_DURATION = 1200;
 
-    const questions = [
-        {
-            key: 'name',
-            bot: "Hey there! 👋 I'm Vrinda AI — your personal website architect.\n\nLet's build something incredible together. What's your name?",
-            placeholder: 'Enter your name',
-            hint: 'e.g. Radha, Arjun, Priya',
-            type: 'text',
-            xp: 50,
-            achievement: '🎯 Identity Unlocked',
-            validate: (v) => v.trim().length >= 2 || 'Please enter at least 2 characters'
+    // -------- Theme configurations --------
+    const THEMES = {
+        spiritual: {
+            label: 'Spiritual / Bhakti',
+            emoji: '🌸',
+            icon: 'ph-flower-lotus',
+            defaultPalette: 'saffron',
+            audience: 'devotees',
+            action: 'book pooja or seva',
+            servicesLabel: 'Seva & Services',
+            services: [
+                { icon: 'ph-flower-lotus', name: 'Pooja Booking', price: '₹501 onwards' },
+                { icon: 'ph-moon-stars', name: 'Kundli Consultation', price: '₹1,100' },
+                { icon: 'ph-users-three', name: 'Live Satsang Access', price: '₹251/month' }
+            ],
+            testimonial: '"Finally a professional home for my Bhakti seva. Devotees from abroad can now book easily." — Radhe Sevak, Vrindavan',
+            sampleHero: 'Radhe Radhe 🙏 Bringing devotional seva online.',
+            ctaText: 'Book Seva on WhatsApp'
         },
-        {
-            key: 'idea',
-            bot: (data) => `Great to meet you, ${data.name}! ✨\n\nNow tell me — what's the big idea? What kind of website do you want? Be specific and dream big!`,
-            placeholder: 'Describe your dream website...',
-            hint: 'e.g. A fitness coaching site, spiritual seva page, online store',
-            type: 'text',
-            xp: 100,
-            achievement: '💡 Vision Captured',
-            validate: (v) => v.trim().length >= 4 || 'Tell me more about your idea (at least 4 characters)'
+        fitness: {
+            label: 'Fitness / Coaching',
+            emoji: '💪',
+            icon: 'ph-barbell',
+            defaultPalette: 'midnight',
+            audience: 'clients',
+            action: 'book a coaching call',
+            servicesLabel: 'Programs',
+            services: [
+                { icon: 'ph-barbell', name: '1-on-1 Coaching', price: '₹4,999/month' },
+                { icon: 'ph-flag-banner', name: '12-Week Transformation', price: '₹9,999' },
+                { icon: 'ph-users-three', name: 'Group Boot Camp', price: '₹1,999/month' }
+            ],
+            testimonial: '"I lost 18kg and got my life back. The coaching is 1000% worth it." — Priya, Delhi',
+            sampleHero: 'Build the body you\'ve always wanted.',
+            ctaText: 'Start Free Trial'
         },
-        {
-            key: 'email',
-            bot: (data) => `Love the vision! 🔥\n\nDrop your email — I'll send your website preview and exclusive design concepts here.`,
-            placeholder: 'you@email.com',
-            hint: 'We\'ll send your preview here',
-            type: 'email',
-            xp: 75,
-            achievement: '📧 Connected',
-            validate: (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) || 'Please enter a valid email address'
+        diet: {
+            label: 'Diet / Nutrition',
+            emoji: '🥗',
+            icon: 'ph-leaf',
+            defaultPalette: 'emerald',
+            audience: 'wellness seekers',
+            action: 'book a diet consultation',
+            servicesLabel: 'Nutrition Plans',
+            services: [
+                { icon: 'ph-leaf', name: 'Personalized Meal Plan', price: '₹2,499' },
+                { icon: 'ph-scales', name: 'Weight Loss Program', price: '₹5,999' },
+                { icon: 'ph-heart', name: 'PCOS & Hormone Plan', price: '₹3,999' }
+            ],
+            testimonial: '"Lost 12kg in 4 months with zero starvation. Real food, real results." — Meera, Mumbai',
+            sampleHero: 'Nutrition that fits your life, not the other way around.',
+            ctaText: 'Book Free Call'
         },
-        {
-            key: 'phone',
-            bot: (data) => `Almost there, ${data.name}! 🚀\n\nYour WhatsApp number — so I can send you the live website link once it's ready.`,
-            placeholder: '+91 98765 43210',
-            hint: 'WhatsApp number with country code',
-            type: 'tel',
-            xp: 75,
-            achievement: '📱 Mission Complete',
-            validate: (v) => {
-                const digits = v.replace(/\D/g, '');
-                return digits.length >= 10 || 'Please enter a valid phone number (10+ digits)';
-            }
+        business: {
+            label: 'Business / Creator',
+            emoji: '💼',
+            icon: 'ph-briefcase',
+            defaultPalette: 'violet',
+            audience: 'customers',
+            action: 'reach out for a quote',
+            servicesLabel: 'Our Services',
+            services: [
+                { icon: 'ph-rocket-launch', name: 'Flagship Service', price: 'From ₹9,999' },
+                { icon: 'ph-chart-line-up', name: 'Growth Package', price: 'From ₹24,999' },
+                { icon: 'ph-handshake', name: 'Consultation Call', price: '₹1,499' }
+            ],
+            testimonial: '"Their service 3x\'d my revenue in 6 months. Can\'t recommend enough." — Arjun, Founder',
+            sampleHero: 'Modern solutions for ambitious businesses.',
+            ctaText: 'Get in Touch'
         }
-    ];
+    };
 
-    // State
-    const data = {};
-    let currentStep = 0;
-    let totalXP = 0;
+    // -------- Palette definitions (CSS variable overrides for preview) --------
+    const PALETTES = {
+        violet:   { primary: '#7C3AED', accent: '#EC4899', soft: '#F5F0FF', text: '#1E1B4B', bg: '#FFFFFF' },
+        saffron:  { primary: '#F59E0B', accent: '#DC2626', soft: '#FFFBEB', text: '#7C2D12', bg: '#FFFDF7' },
+        emerald:  { primary: '#10B981', accent: '#0891B2', soft: '#D1FAE5', text: '#064E3B', bg: '#FFFFFF' },
+        rose:     { primary: '#EC4899', accent: '#A855F7', soft: '#FCE7F3', text: '#831843', bg: '#FFFFFF' },
+        midnight: { primary: '#6366F1', accent: '#F59E0B', soft: '#E0E7FF', text: '#FFFFFF', bg: '#1E1B4B' }
+    };
 
-    // DOM refs
-    let messagesEl, inputEl, formEl, progressBar, hintEl;
-    let chatScreen, loadingScreen, resultScreen;
-    let xpCounter, xpFill, achievementToast, stepIndicator;
+    // -------- Style tweaks (affects preview radius, spacing, typography) --------
+    const STYLES = {
+        modern:  { radius: '14px', buttonShape: '12px', font: 'Outfit, sans-serif', vibe: 'clean startup look' },
+        minimal: { radius: '4px', buttonShape: '4px', font: 'Inter, sans-serif', vibe: 'ultra-clean editorial' },
+        premium: { radius: '24px', buttonShape: '999px', font: 'Outfit, serif', vibe: 'luxurious & high-end' },
+        bold:    { radius: '0px', buttonShape: '0px', font: 'Outfit, sans-serif', vibe: 'confident & loud' }
+    };
 
+    const PLANS = {
+        basic:   { name: 'Basic',   price: 299,  label: 'Basic ₹299' },
+        premium: { name: 'Premium', price: 999,  label: 'Premium ₹999' },
+        pro:     { name: 'Pro',     price: 1999, label: 'Pro ₹1999 (with .com)' }
+    };
+
+    // -------- Flow mapping (for progress bar + step counter) --------
+    const STEP_ORDER = ['welcome', 'idea', 'theme', 'style', 'loading', 'preview', 'pricing', 'contact', 'success'];
+    const STEP_LABELS = {
+        welcome: { n: 0, of: 5 }, idea: { n: 1, of: 5 }, theme: { n: 2, of: 5 },
+        style: { n: 3, of: 5 }, loading: { n: 4, of: 5 }, preview: { n: 4, of: 5 },
+        pricing: { n: 5, of: 5 }, contact: { n: 5, of: 5 }, success: { n: 5, of: 5 }
+    };
+
+    // -------- State --------
+    const state = {
+        current: 'welcome',
+        idea: '',
+        brand: '',
+        theme: null,
+        style: null,
+        palette: null,
+        plan: null,
+        email: '',
+        phone: ''
+    };
+
+    // -------- Init --------
     function init() {
-        messagesEl = document.getElementById('chat-messages');
-        inputEl = document.getElementById('chat-input');
-        formEl = document.getElementById('chat-input-form');
-        progressBar = document.getElementById('progress-bar');
-        hintEl = document.getElementById('input-hint');
-        chatScreen = document.getElementById('chat-screen');
-        loadingScreen = document.getElementById('loading-screen');
-        resultScreen = document.getElementById('result-screen');
-        xpCounter = document.getElementById('xp-counter');
-        xpFill = document.getElementById('xp-fill');
-        achievementToast = document.getElementById('achievement-toast');
-        stepIndicator = document.getElementById('step-indicator');
+        const root = document.getElementById('chat-builder');
+        if (!root) return;
 
-        if (!formEl) return;
+        root.addEventListener('click', handleClick);
+        updateHeader();
 
-        formEl.addEventListener('submit', handleSubmit);
-
-        const restartBtn = document.getElementById('restart-btn');
-        if (restartBtn) restartBtn.addEventListener('click', restart);
-
-        // Kick off
-        askNext();
+        // Persist in sessionStorage so "Open full preview in new tab" can read it
+        window.addEventListener('beforeunload', persistState);
     }
 
-    function askNext() {
-        if (currentStep >= questions.length) {
-            finishFlow();
+    function persistState() {
+        try { sessionStorage.setItem('vrindaBuilderState', JSON.stringify(state)); } catch (e) {}
+    }
+
+    // -------- Click dispatcher --------
+    function handleClick(e) {
+        const actionEl = e.target.closest('[data-action]');
+        if (actionEl) {
+            e.preventDefault();
+            const action = actionEl.getAttribute('data-action');
+            handleAction(action, actionEl);
             return;
         }
+        const themeCard = e.target.closest('.theme-card');
+        if (themeCard) { selectTheme(themeCard.dataset.theme); return; }
+        const styleCard = e.target.closest('.style-card');
+        if (styleCard) { selectStyle(styleCard.dataset.style); return; }
+        const paletteSwatch = e.target.closest('.palette-swatch');
+        if (paletteSwatch) { selectPalette(paletteSwatch.dataset.palette); return; }
+    }
 
-        const q = questions[currentStep];
-        updateProgress();
-        updateStepIndicator();
-        updateInputFor(q);
-        showTypingThen(() => {
-            const text = typeof q.bot === 'function' ? q.bot(data) : q.bot;
-            addBotMessage(text);
-            inputEl.focus();
+    function handleAction(action, el) {
+        switch (action) {
+            case 'start':           goTo('idea'); break;
+            case 'back':            goBack(); break;
+            case 'next-idea':       submitIdea(); break;
+            case 'generate':        startGeneration(); break;
+            case 'edit-details':    goTo('idea'); break;
+            case 'go-pricing':      goTo('pricing'); break;
+            case 'back-to-preview': goTo('preview'); break;
+            case 'select-plan':     selectPlan(el.dataset.plan); break;
+            case 'back-to-pricing': goTo('pricing'); break;
+            case 'restart':         restart(); break;
+        }
+    }
+
+    // -------- Navigation --------
+    function goTo(screenName) {
+        const screens = document.querySelectorAll('.builder-screen');
+        screens.forEach(s => s.classList.toggle('hidden', s.dataset.screen !== screenName));
+        state.current = screenName;
+        updateHeader();
+        // Scroll builder into view for mobile
+        const section = document.getElementById('builder');
+        if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function goBack() {
+        const order = { idea: 'welcome', theme: 'idea', style: 'theme', pricing: 'preview', contact: 'pricing' };
+        goTo(order[state.current] || 'welcome');
+    }
+
+    function updateHeader() {
+        const stepCounter = document.getElementById('step-counter');
+        const progressBar = document.getElementById('progress-bar');
+        const s = STEP_LABELS[state.current];
+        if (stepCounter) {
+            stepCounter.textContent = s.n === 0 ? 'Get started' : `Step ${s.n} of ${s.of}`;
+        }
+        if (progressBar) {
+            const pct = (s.n / s.of) * 100;
+            progressBar.style.width = pct + '%';
+        }
+    }
+
+    // -------- Step 2: Idea --------
+    function submitIdea() {
+        const ideaEl = document.getElementById('idea-input');
+        const brandEl = document.getElementById('brand-input');
+        const idea = (ideaEl.value || '').trim();
+        if (idea.length < 8) {
+            ideaEl.classList.add('shake');
+            setTimeout(() => ideaEl.classList.remove('shake'), 400);
+            ideaEl.focus();
+            return;
+        }
+        state.idea = idea;
+        state.brand = (brandEl.value || '').trim();
+        goTo('theme');
+    }
+
+    // -------- Step 3: Theme --------
+    function selectTheme(themeKey) {
+        state.theme = themeKey;
+        state.palette = THEMES[themeKey].defaultPalette; // preselect palette
+        document.querySelectorAll('.theme-card').forEach(c => {
+            c.classList.toggle('selected', c.dataset.theme === themeKey);
         });
+        setTimeout(() => {
+            goTo('style');
+            // Pre-highlight default palette
+            document.querySelectorAll('.palette-swatch').forEach(p => {
+                p.classList.toggle('selected', p.dataset.palette === state.palette);
+            });
+            refreshGenerateBtn();
+        }, 280);
     }
 
-    function handleSubmit(e) {
-        e.preventDefault();
-        const value = inputEl.value.trim();
-        const q = questions[currentStep];
-        if (!q) return;
-
-        const validation = q.validate ? q.validate(value) : true;
-        if (validation !== true) {
-            showInputError(validation);
-            return;
-        }
-
-        // Store + echo
-        data[q.key] = value;
-        addUserMessage(value);
-        inputEl.value = '';
-        hintEl.textContent = '';
-        hintEl.classList.remove('error');
-
-        // Award XP + achievement
-        awardXP(q.xp || 50);
-        if (q.achievement) {
-            setTimeout(() => showAchievement(q.achievement), 300);
-        }
-
-        currentStep++;
-        askNext();
+    // -------- Step 4: Style + palette --------
+    function selectStyle(styleKey) {
+        state.style = styleKey;
+        document.querySelectorAll('.style-card').forEach(c => {
+            c.classList.toggle('selected', c.dataset.style === styleKey);
+        });
+        refreshGenerateBtn();
     }
 
-    function awardXP(points) {
-        totalXP += points;
-        if (xpCounter) {
-            animateNumber(xpCounter, totalXP - points, totalXP, 600);
+    function selectPalette(paletteKey) {
+        state.palette = paletteKey;
+        document.querySelectorAll('.palette-swatch').forEach(p => {
+            p.classList.toggle('selected', p.dataset.palette === paletteKey);
+        });
+        refreshGenerateBtn();
+    }
+
+    function refreshGenerateBtn() {
+        const btn = document.getElementById('generate-btn');
+        if (!btn) return;
+        btn.disabled = !(state.style && state.palette);
+    }
+
+    // -------- Step 5: Loading / Generation --------
+    function startGeneration() {
+        if (!state.style || !state.palette) return;
+        goTo('loading');
+        animateGeneration();
+    }
+
+    function animateGeneration() {
+        const steps = document.querySelectorAll('#progress-steps li');
+        const total = steps.length;
+        const perStep = 1100; // ms
+        const percentEl = document.getElementById('build-percent');
+        const circle = document.getElementById('circle-progress');
+        const circumference = 2 * Math.PI * 54;
+        if (circle) {
+            circle.style.strokeDasharray = circumference;
+            circle.style.strokeDashoffset = circumference;
         }
-        if (xpFill) {
-            const pct = Math.min(100, (totalXP / 300) * 100);
-            xpFill.style.width = pct + '%';
-        }
+
+        steps.forEach((el, idx) => {
+            setTimeout(() => {
+                const icon = el.querySelector('i');
+                if (icon) icon.className = 'ph-fill ph-check-circle';
+                el.classList.add('done');
+
+                // Animate percent + circle progress
+                const pct = Math.round(((idx + 1) / total) * 100);
+                if (percentEl) animateNumber(percentEl, parseInt(percentEl.textContent) || 0, pct, 800);
+                if (circle) {
+                    const offset = circumference - (pct / 100) * circumference;
+                    circle.style.strokeDashoffset = offset;
+                }
+            }, perStep * (idx + 1));
+        });
+
+        // After all steps, show preview
+        setTimeout(() => {
+            renderPreview();
+            renderPRD();
+            goTo('preview');
+            fireConfetti();
+        }, perStep * (total + 1));
     }
 
     function animateNumber(el, from, to, duration) {
         const start = performance.now();
-        const diff = to - from;
         function tick(now) {
-            const elapsed = now - start;
-            const progress = Math.min(elapsed / duration, 1);
-            const eased = 1 - Math.pow(1 - progress, 3); // easeOutCubic
-            el.textContent = Math.round(from + diff * eased);
-            if (progress < 1) requestAnimationFrame(tick);
+            const t = Math.min(1, (now - start) / duration);
+            const value = Math.round(from + (to - from) * t);
+            el.textContent = value;
+            if (t < 1) requestAnimationFrame(tick);
         }
         requestAnimationFrame(tick);
     }
 
-    function showAchievement(text) {
-        if (!achievementToast) return;
-        achievementToast.textContent = text;
-        achievementToast.classList.add('show');
-        setTimeout(() => achievementToast.classList.remove('show'), 2200);
+    // -------- Step 6: Preview rendering --------
+    function renderPreview() {
+        const screen = document.getElementById('live-preview-screen');
+        if (!screen) return;
+
+        const theme = THEMES[state.theme];
+        const palette = PALETTES[state.palette];
+        const style = STYLES[state.style];
+        const brandName = state.brand || craftBrandName(state.idea, theme);
+
+        screen.innerHTML = buildPreviewHTML({ brandName, theme, palette, style, idea: state.idea });
+        screen.style.setProperty('--p-primary', palette.primary);
+        screen.style.setProperty('--p-accent', palette.accent);
+        screen.style.setProperty('--p-soft', palette.soft);
+        screen.style.setProperty('--p-text', palette.text);
+        screen.style.setProperty('--p-bg', palette.bg);
+        screen.style.setProperty('--p-radius', style.radius);
+        screen.style.setProperty('--p-btn-radius', style.buttonShape);
+        screen.style.fontFamily = style.font;
+
+        // Full-preview link (opens new tab, reads state from sessionStorage)
+        const fullBtn = document.getElementById('open-full-preview');
+        if (fullBtn) {
+            persistState();
+            fullBtn.href = '/preview.html';
+        }
     }
 
-    function updateStepIndicator() {
-        if (!stepIndicator) return;
-        stepIndicator.textContent = `Step ${currentStep + 1} of ${questions.length}`;
-    }
+    function buildPreviewHTML({ brandName, theme, palette, style, idea }) {
+        const tagline = escapeHtml(idea.length > 90 ? idea.slice(0, 87) + '...' : idea);
+        const servicesHtml = theme.services.map(s => `
+            <div class="lp-service">
+                <div class="lp-service-icon"><i class="ph-fill ${s.icon}"></i></div>
+                <div class="lp-service-body">
+                    <div class="lp-service-name">${escapeHtml(s.name)}</div>
+                    <div class="lp-service-price">${escapeHtml(s.price)}</div>
+                </div>
+                <i class="ph ph-arrow-right"></i>
+            </div>
+        `).join('');
 
-    function addBotMessage(text) {
-        const msg = document.createElement('div');
-        msg.className = 'msg msg-bot';
-        msg.innerHTML = `
-            <div class="msg-avatar"><i class="ph-fill ph-sparkle"></i></div>
-            <div class="msg-bubble">${escapeHtml(text).replace(/\n/g, '<br>')}</div>
-        `;
-        messagesEl.appendChild(msg);
-        scrollToBottom();
-    }
+        return `
+            <div class="lp-wrap">
+                <nav class="lp-nav">
+                    <div class="lp-logo"><i class="ph-fill ${theme.icon}"></i> ${escapeHtml(brandName)}</div>
+                    <i class="ph ph-list"></i>
+                </nav>
 
-    function addUserMessage(text) {
-        const msg = document.createElement('div');
-        msg.className = 'msg msg-user';
-        msg.innerHTML = `<div class="msg-bubble">${escapeHtml(text)}</div>`;
-        messagesEl.appendChild(msg);
-        scrollToBottom();
-    }
+                <section class="lp-hero">
+                    <div class="lp-pill"><i class="ph ph-sparkle"></i> ${escapeHtml(theme.label)}</div>
+                    <h1>${escapeHtml(theme.sampleHero)}</h1>
+                    <p class="lp-hero-sub">${tagline || 'Your idea, beautifully online.'}</p>
+                    <button class="lp-cta lp-cta-primary"><i class="ph-fill ph-whatsapp-logo"></i> ${escapeHtml(theme.ctaText)}</button>
+                    <div class="lp-trust">
+                        <span><i class="ph-fill ph-check-circle"></i> Trusted by 500+</span>
+                        <span><i class="ph-fill ph-star"></i> 4.9 / 5</span>
+                    </div>
+                </section>
 
-    function showTypingThen(callback) {
-        const typing = document.createElement('div');
-        typing.className = 'msg msg-bot msg-typing';
-        typing.innerHTML = `
-            <div class="msg-avatar"><i class="ph-fill ph-sparkle"></i></div>
-            <div class="msg-bubble typing-bubble">
-                <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+                <section class="lp-section">
+                    <div class="lp-section-head">
+                        <span class="lp-section-tag">${escapeHtml(theme.servicesLabel)}</span>
+                        <h2>What we offer</h2>
+                    </div>
+                    <div class="lp-services">${servicesHtml}</div>
+                </section>
+
+                <section class="lp-section lp-about">
+                    <div class="lp-section-head">
+                        <span class="lp-section-tag">About</span>
+                        <h2>About ${escapeHtml(brandName)}</h2>
+                    </div>
+                    <p>${escapeHtml(idea) || 'We help ' + theme.audience + ' get the results they deserve — with care, clarity, and quality.'}</p>
+                </section>
+
+                <section class="lp-section lp-testimonial-section">
+                    <div class="lp-quote-icon">"</div>
+                    <p class="lp-testimonial">${escapeHtml(theme.testimonial)}</p>
+                </section>
+
+                <section class="lp-section lp-cta-section">
+                    <h2>Ready to get started?</h2>
+                    <p>Chat with us on WhatsApp — we reply in minutes.</p>
+                    <button class="lp-cta lp-cta-primary"><i class="ph-fill ph-whatsapp-logo"></i> ${escapeHtml(theme.ctaText)}</button>
+                </section>
+
+                <footer class="lp-footer">
+                    <div>© ${new Date().getFullYear()} ${escapeHtml(brandName)}</div>
+                    <div class="lp-footer-made">Built with ✨ by vrindahitwebsite.com</div>
+                </footer>
             </div>
         `;
-        messagesEl.appendChild(typing);
-        scrollToBottom();
-
-        setTimeout(() => {
-            typing.remove();
-            callback();
-        }, TYPING_DELAY);
     }
 
-    function updateInputFor(q) {
-        inputEl.type = q.type || 'text';
-        inputEl.placeholder = q.placeholder || 'Type your answer...';
-        hintEl.textContent = q.hint || '';
-        hintEl.classList.remove('error');
+    function craftBrandName(idea, theme) {
+        const words = (idea || '').trim().split(/\s+/).slice(0, 3);
+        const pick = words.find(w => w.length >= 4 && /^[a-zA-Z]/.test(w));
+        if (pick) return capitalize(pick);
+        return theme.label.split(' ')[0];
     }
 
-    function showInputError(message) {
-        hintEl.textContent = message;
-        hintEl.classList.add('error');
-        inputEl.classList.add('shake');
-        setTimeout(() => inputEl.classList.remove('shake'), 400);
+    // -------- PRD rendering --------
+    function renderPRD() {
+        const theme = THEMES[state.theme];
+        const style = STYLES[state.style];
+        const brandName = state.brand || craftBrandName(state.idea, theme);
+
+        document.getElementById('prd-title').textContent = `${brandName} — Website Plan`;
+        document.getElementById('prd-purpose').textContent =
+            `A ${style.vibe} ${theme.label.toLowerCase()} website designed to convert ${theme.audience} into people who ${theme.action}.`;
+
+        const sections = [
+            { name: 'Hero Section', purpose: `Grab attention in 3 seconds with a clear promise and one primary CTA (${theme.ctaText}).` },
+            { name: `${theme.servicesLabel} Grid`, purpose: `Show 3 clear offerings with transparent pricing to reduce friction.` },
+            { name: 'About Section', purpose: `Build trust with ${theme.audience} through authentic, specific storytelling.` },
+            { name: 'Testimonials', purpose: 'Social proof from past clients/devotees — highest trust multiplier.' },
+            { name: 'Final CTA + Footer', purpose: 'Second conversion point + WhatsApp integration for instant contact.' }
+        ];
+        const sectionsEl = document.getElementById('prd-sections');
+        sectionsEl.innerHTML = sections.map(s => `
+            <li>
+                <strong>${escapeHtml(s.name)}</strong>
+                <span>${escapeHtml(s.purpose)}</span>
+            </li>
+        `).join('');
+
+        document.getElementById('prd-conversion').textContent =
+            `One primary goal per screen → minimal distraction. Sticky WhatsApp CTA across all pages. Clear pricing above the fold reduces drop-off.`;
     }
 
-    function updateProgress() {
-        const pct = Math.min(100, (currentStep / questions.length) * 100);
-        if (progressBar) progressBar.style.width = pct + '%';
+    // -------- Pricing / Plan selection --------
+    function selectPlan(planKey) {
+        state.plan = planKey;
+        const selectedLabelEl = document.getElementById('selected-plan-label');
+        if (selectedLabelEl) selectedLabelEl.textContent = PLANS[planKey].name;
+        const summary = document.getElementById('plan-summary');
+        if (summary) {
+            summary.innerHTML = `
+                <div class="summary-row"><span>Plan</span><strong>${PLANS[planKey].label}</strong></div>
+                <div class="summary-row"><span>Theme</span><strong>${THEMES[state.theme].label}</strong></div>
+                <div class="summary-row"><span>Style</span><strong>${capitalize(state.style)} / ${capitalize(state.palette)}</strong></div>
+                <div class="summary-row total"><span>You pay</span><strong>₹${PLANS[planKey].price}</strong></div>
+            `;
+        }
+        goTo('contact');
     }
 
-    function scrollToBottom() {
-        messagesEl.scrollTop = messagesEl.scrollHeight;
-    }
-
-    // =============== Building animation steps ===============
-    const buildingSteps = [
-        { icon: 'ph-fill ph-brain', text: 'Analyzing your vision...', duration: 1800 },
-        { icon: 'ph-fill ph-layout', text: 'Designing page structure...', duration: 1500 },
-        { icon: 'ph-fill ph-palette', text: 'Applying premium styling...', duration: 1400 },
-        { icon: 'ph-fill ph-device-mobile', text: 'Optimizing for mobile...', duration: 1200 },
-        { icon: 'ph-fill ph-globe-hemisphere-west', text: 'Deploying to the cloud...', duration: 1000 },
-        { icon: 'ph-fill ph-rocket-launch', text: 'Launching your website!', duration: 800 }
-    ];
-
-    function finishFlow() {
-        updateProgress();
-
-        // Final XP burst
-        awardXP(0);
-
-        // Hide chat, show loader
-        chatScreen.classList.add('hidden');
-        loadingScreen.classList.remove('hidden');
-
-        // Animate building steps sequentially
-        const stepsContainer = document.getElementById('progress-steps');
-        if (stepsContainer) stepsContainer.innerHTML = '';
-
-        let delay = 0;
-        buildingSteps.forEach((step, idx) => {
-            setTimeout(() => {
-                // Add step item
-                const li = document.createElement('li');
-                li.innerHTML = `<i class="${step.icon}"></i> ${step.text}`;
-                li.className = 'building-step';
-                if (stepsContainer) stepsContainer.appendChild(li);
-
-                // Update percentage
-                const percentEl = document.getElementById('build-percent');
-                if (percentEl) {
-                    const pct = Math.round(((idx + 1) / buildingSteps.length) * 100);
-                    animateNumber(percentEl, idx === 0 ? 0 : Math.round((idx / buildingSteps.length) * 100), pct, step.duration * 0.8);
-                }
-
-                // Update circular progress
-                const circleProgress = document.getElementById('circle-progress');
-                if (circleProgress) {
-                    const pct = ((idx + 1) / buildingSteps.length) * 100;
-                    const circumference = 2 * Math.PI * 54;
-                    const offset = circumference - (pct / 100) * circumference;
-                    circleProgress.style.strokeDashoffset = offset;
-                }
-
-                // Mark as done after duration
-                setTimeout(() => {
-                    li.classList.add('done');
-                }, step.duration * 0.7);
-
-            }, delay);
-            delay += step.duration;
-        });
-
-        // After all steps -> show result
-        setTimeout(showResult, delay + 600);
-    }
-
-    function showResult() {
-        loadingScreen.classList.add('hidden');
-        resultScreen.classList.remove('hidden');
-
-        // Populate preview
-        const brandName = toBrandName(data.name, data.idea);
-        const tagline = craftTagline(data.idea);
-
-        const nameEl = document.getElementById('preview-name');
-        const brandEl = document.getElementById('preview-brand-name');
-        const taglineEl = document.getElementById('preview-tagline');
-        if (nameEl) nameEl.textContent = data.name;
-        if (brandEl) brandEl.textContent = brandName;
-        if (taglineEl) taglineEl.textContent = tagline;
-
-        // Build WhatsApp pre-filled link
+    // -------- Final claim (WhatsApp pre-fill) --------
+    function bindClaimButton() {
         const claimBtn = document.getElementById('claim-btn');
-        if (claimBtn) {
+        if (!claimBtn) return;
+        claimBtn.addEventListener('click', (e) => {
+            const emailEl = document.getElementById('email-input');
+            const phoneEl = document.getElementById('phone-input');
+            const email = (emailEl.value || '').trim();
+            const phone = (phoneEl.value || '').trim();
+
+            const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            const phoneOk = phone.replace(/\D/g, '').length >= 10;
+
+            if (!emailOk) { emailEl.focus(); shake(emailEl); e.preventDefault(); return; }
+            if (!phoneOk) { phoneEl.focus(); shake(phoneEl); e.preventDefault(); return; }
+
+            state.email = email;
+            state.phone = phone;
+
+            const theme = THEMES[state.theme];
+            const plan = PLANS[state.plan];
+            const brandName = state.brand || craftBrandName(state.idea, theme);
+
             const message =
-                `Hello! I just generated my website preview on vrindahitwebsite.com ✨\n\n` +
-                `*Name:* ${data.name}\n` +
-                `*Idea:* ${data.idea}\n` +
-                `*Email:* ${data.email}\n` +
-                `*WhatsApp:* ${data.phone}\n\n` +
-                `I'd like to claim my website and get it built within 24 hours!`;
+                `Hello Vrinda Hit! 🙏 I just built my preview on vrindahitwebsite.com ✨\n\n` +
+                `*Brand:* ${brandName}\n` +
+                `*Idea:* ${state.idea}\n` +
+                `*Theme:* ${theme.label}\n` +
+                `*Style:* ${capitalize(state.style)} + ${capitalize(state.palette)} palette\n` +
+                `*Plan:* ${plan.label} (₹${plan.price})\n` +
+                `*Email:* ${email}\n` +
+                `*WhatsApp:* ${phone}\n\n` +
+                `I'd like to claim my website and get it delivered in 24 hours!`;
+
             claimBtn.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+
+            // Show success screen after a short delay (WhatsApp takes over)
+            setTimeout(() => {
+                renderSuccess();
+                goTo('success');
+            }, 700);
+        });
+    }
+
+    function renderSuccess() {
+        const theme = THEMES[state.theme];
+        const plan = PLANS[state.plan];
+        const brandName = state.brand || craftBrandName(state.idea, theme);
+        const summary = document.getElementById('success-summary');
+        if (summary) {
+            summary.innerHTML = `
+                <div class="summary-row"><span>Brand</span><strong>${escapeHtml(brandName)}</strong></div>
+                <div class="summary-row"><span>Plan</span><strong>${plan.label}</strong></div>
+                <div class="summary-row"><span>Delivery</span><strong>Within 24 hours</strong></div>
+            `;
         }
-
-        // Launch confetti
-        launchConfetti();
-
-        // Scroll
-        const builderEl = document.getElementById('builder');
-        if (builderEl) builderEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
-    function launchConfetti() {
-        const canvas = document.getElementById('confetti-canvas');
-        if (!canvas) return;
-        const ctx = canvas.getContext('2d');
-        canvas.width = canvas.parentElement.offsetWidth;
-        canvas.height = canvas.parentElement.offsetHeight;
-        canvas.style.display = 'block';
-
-        const colors = ['#7C3AED', '#EC4899', '#F59E0B', '#10B981', '#6366F1', '#F43F5E'];
-        const particles = [];
-
-        for (let i = 0; i < 80; i++) {
-            particles.push({
-                x: canvas.width * Math.random(),
-                y: -20 - Math.random() * 100,
-                w: 6 + Math.random() * 6,
-                h: 4 + Math.random() * 4,
-                color: colors[Math.floor(Math.random() * colors.length)],
-                vx: (Math.random() - 0.5) * 3,
-                vy: 2 + Math.random() * 4,
-                rotation: Math.random() * 360,
-                rotSpeed: (Math.random() - 0.5) * 10,
-                opacity: 1
-            });
-        }
-
-        let frame = 0;
-        function draw() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            let alive = false;
-
-            particles.forEach(p => {
-                if (p.opacity <= 0) return;
-                alive = true;
-                p.x += p.vx;
-                p.y += p.vy;
-                p.vy += 0.1;
-                p.rotation += p.rotSpeed;
-
-                if (p.y > canvas.height * 0.7) {
-                    p.opacity -= 0.02;
-                }
-
-                ctx.save();
-                ctx.translate(p.x, p.y);
-                ctx.rotate((p.rotation * Math.PI) / 180);
-                ctx.globalAlpha = Math.max(0, p.opacity);
-                ctx.fillStyle = p.color;
-                ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
-                ctx.restore();
-            });
-
-            frame++;
-            if (alive && frame < 200) {
-                requestAnimationFrame(draw);
-            } else {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                canvas.style.display = 'none';
-            }
-        }
-
-        requestAnimationFrame(draw);
+    function shake(el) {
+        el.classList.add('shake');
+        setTimeout(() => el.classList.remove('shake'), 400);
     }
 
-    function toBrandName(name, idea) {
-        const nm = (name || '').trim().split(/\s+/)[0];
-        if (nm) return capitalize(nm) + "'s";
-        const ideaWord = (idea || 'Your').trim().split(/\s+/)[0];
-        return capitalize(ideaWord);
-    }
-
-    function craftTagline(idea) {
-        if (!idea) return 'Your idea, live online';
-        const clean = idea.trim();
-        const short = clean.length > 60 ? clean.slice(0, 57) + '...' : clean;
-        return short.charAt(0).toUpperCase() + short.slice(1);
-    }
-
-    function capitalize(s) {
-        return s ? s.charAt(0).toUpperCase() + s.slice(1).toLowerCase() : s;
-    }
-
-    function escapeHtml(s) {
-        return String(s)
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#039;');
-    }
-
+    // -------- Restart --------
     function restart() {
-        currentStep = 0;
-        totalXP = 0;
-        for (const k in data) delete data[k];
-        messagesEl.innerHTML = '';
-        inputEl.value = '';
-        hintEl.textContent = '';
+        state.current = 'welcome';
+        state.idea = ''; state.brand = ''; state.theme = null;
+        state.style = null; state.palette = null; state.plan = null;
+        state.email = ''; state.phone = '';
 
-        if (xpCounter) xpCounter.textContent = '0';
-        if (xpFill) xpFill.style.width = '0%';
+        document.querySelectorAll('.theme-card, .style-card, .palette-swatch')
+            .forEach(el => el.classList.remove('selected'));
+        const ideaInput = document.getElementById('idea-input'); if (ideaInput) ideaInput.value = '';
+        const brandInput = document.getElementById('brand-input'); if (brandInput) brandInput.value = '';
+        const emailInput = document.getElementById('email-input'); if (emailInput) emailInput.value = '';
+        const phoneInput = document.getElementById('phone-input'); if (phoneInput) phoneInput.value = '';
 
-        const stepsContainer = document.getElementById('progress-steps');
-        if (stepsContainer) stepsContainer.innerHTML = '';
-
+        // Reset loading steps
+        document.querySelectorAll('#progress-steps li').forEach(el => {
+            el.classList.remove('done');
+            const i = el.querySelector('i');
+            if (i) i.className = 'ph ph-circle-dashed';
+        });
         const percentEl = document.getElementById('build-percent');
         if (percentEl) percentEl.textContent = '0';
 
-        const circleProgress = document.getElementById('circle-progress');
-        if (circleProgress) {
-            const circumference = 2 * Math.PI * 54;
-            circleProgress.style.strokeDashoffset = circumference;
+        goTo('welcome');
+    }
+
+    // -------- Confetti (lightweight canvas) --------
+    function fireConfetti() {
+        const canvas = document.getElementById('confetti-canvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        const rect = canvas.parentElement.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+
+        const colors = ['#7C3AED', '#EC4899', '#F59E0B', '#10B981', '#6366F1'];
+        const pieces = [];
+        for (let i = 0; i < 120; i++) {
+            pieces.push({
+                x: Math.random() * canvas.width,
+                y: -20 - Math.random() * 100,
+                r: 3 + Math.random() * 5,
+                color: colors[Math.floor(Math.random() * colors.length)],
+                vx: -2 + Math.random() * 4,
+                vy: 2 + Math.random() * 4,
+                rot: Math.random() * Math.PI,
+                vrot: -0.2 + Math.random() * 0.4
+            });
         }
-
-        resultScreen.classList.add('hidden');
-        loadingScreen.classList.add('hidden');
-        chatScreen.classList.remove('hidden');
-
-        askNext();
+        let frame = 0;
+        const maxFrames = 180;
+        function tick() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            pieces.forEach(p => {
+                p.x += p.vx; p.y += p.vy; p.rot += p.vrot;
+                p.vy += 0.05;
+                ctx.save();
+                ctx.translate(p.x, p.y);
+                ctx.rotate(p.rot);
+                ctx.fillStyle = p.color;
+                ctx.fillRect(-p.r, -p.r / 2, p.r * 2, p.r);
+                ctx.restore();
+            });
+            frame++;
+            if (frame < maxFrames) requestAnimationFrame(tick);
+            else ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+        tick();
     }
 
+    // -------- Helpers --------
+    function escapeHtml(s) {
+        return String(s == null ? '' : s)
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+    }
+    function capitalize(s) {
+        return s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
+    }
+
+    // -------- Boot --------
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
+        document.addEventListener('DOMContentLoaded', () => { init(); bindClaimButton(); });
     } else {
-        init();
+        init(); bindClaimButton();
     }
+
+    // Expose state for preview.html
+    window.__vrindaBuilderState = state;
+    window.__vrindaBuilderConfig = { THEMES, PALETTES, STYLES, PLANS };
 })();

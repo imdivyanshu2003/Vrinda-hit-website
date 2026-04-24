@@ -244,13 +244,13 @@
         </div>
     </header>
 
-    <!-- AI WEBSITE BUILDER — Gamified Lead-Capture -->
+    <!-- AI WEBSITE AUTO-BUILDER — Preview-first SaaS flow -->
     <section class="builder-section" id="builder">
         <div class="container">
             <div class="section-heading">
-                <span class="section-tag"><i class="ph-fill ph-game-controller"></i> Interactive Builder</span>
-                <h2>Build Your Dream Website in <span class="text-gradient">60 Seconds</span></h2>
-                <p>Answer 4 quick questions. Watch us build your website in real-time — powered by AI.</p>
+                <span class="section-tag"><i class="ph-fill ph-sparkle"></i> AI Auto-Builder</span>
+                <h2>Turn Your Idea Into a Live Website <span class="text-gradient">Instantly</span></h2>
+                <p>Preview first. Pay later. Go live in 24 hours.</p>
             </div>
 
             <!-- Floating particles background -->
@@ -264,44 +264,147 @@
             </div>
 
             <div class="chat-builder" id="chat-builder">
-                <!-- HEADER with XP + Progress -->
+                <!-- HEADER -->
                 <div class="chat-header">
-                    <div class="chat-avatar">
-                        <i class="ph-fill ph-sparkle"></i>
-                    </div>
+                    <div class="chat-avatar"><i class="ph-fill ph-sparkle"></i></div>
                     <div class="chat-title">
-                        <h3>Vrinda AI</h3>
+                        <h3>Vrinda AI Builder</h3>
                         <span class="online-status"><span class="online-dot"></span> Online now</span>
                     </div>
-                    <div class="xp-badge" id="xp-badge">
-                        <i class="ph-fill ph-lightning"></i>
-                        <span id="xp-counter">0</span> XP
-                        <div class="xp-fill-track"><div class="xp-fill-bar" id="xp-fill"></div></div>
-                    </div>
+                    <div class="step-counter" id="step-counter">Step 1 of 5</div>
                     <div class="progress-track">
                         <div class="progress-bar" id="progress-bar"></div>
                     </div>
                 </div>
 
-                <!-- Achievement Toast -->
-                <div class="achievement-toast" id="achievement-toast"></div>
-
-                <!-- CHAT SCREEN -->
-                <div class="chat-screen" id="chat-screen">
-                    <div class="chat-step-indicator" id="step-indicator">Step 1 of 4</div>
-                    <div class="chat-messages" id="chat-messages"></div>
-
-                    <form class="chat-input-form" id="chat-input-form" autocomplete="off">
-                        <input type="text" id="chat-input" placeholder="Type your answer..." autocomplete="off" required>
-                        <button type="submit" aria-label="Send">
-                            <i class="ph-fill ph-paper-plane-tilt"></i>
+                <!-- ========== SCREEN 1: WELCOME ========== -->
+                <div class="builder-screen" data-screen="welcome">
+                    <div class="welcome-hero">
+                        <div class="welcome-icon"><i class="ph-fill ph-sparkle"></i></div>
+                        <h3>Let's build your website in <span class="text-gradient">minutes</span></h3>
+                        <p>Share your idea → pick a theme → see your live preview. Pay only when you love it.</p>
+                        <ul class="welcome-perks">
+                            <li><i class="ph-fill ph-check-circle"></i> Live preview before payment</li>
+                            <li><i class="ph-fill ph-check-circle"></i> PRD included (plan doc)</li>
+                            <li><i class="ph-fill ph-check-circle"></i> Ready in 24 hours</li>
+                        </ul>
+                        <button type="button" class="btn-builder-primary" data-action="start">
+                            Start Building <i class="ph-fill ph-arrow-right"></i>
                         </button>
-                    </form>
-                    <div class="input-hint" id="input-hint"></div>
+                    </div>
                 </div>
 
-                <!-- BUILDING SCREEN (replaces old loading) -->
-                <div class="loading-screen hidden" id="loading-screen">
+                <!-- ========== SCREEN 2: IDEA INPUT ========== -->
+                <div class="builder-screen hidden" data-screen="idea">
+                    <div class="screen-head">
+                        <h3>What's your idea?</h3>
+                        <p>Describe your business, brand, or offering. The more specific, the better.</p>
+                    </div>
+                    <textarea id="idea-input" class="builder-textarea" rows="4"
+                        placeholder="e.g. I run a Vrindavan shringar seva page on Instagram. I want to accept pooja bookings, show my work, and build trust with devotees worldwide."></textarea>
+                    <input type="text" id="brand-input" class="builder-input" placeholder="Your brand name (optional — e.g. 'Radha Seva')">
+                    <div class="screen-actions">
+                        <button type="button" class="btn-builder-ghost" data-action="back">Back</button>
+                        <button type="button" class="btn-builder-primary" data-action="next-idea">
+                            Next <i class="ph-fill ph-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ========== SCREEN 3: THEME SELECTION ========== -->
+                <div class="builder-screen hidden" data-screen="theme">
+                    <div class="screen-head">
+                        <h3>Pick your theme</h3>
+                        <p>We'll design layouts, copy and colors specifically for your niche.</p>
+                    </div>
+                    <div class="theme-grid">
+                        <button type="button" class="theme-card" data-theme="spiritual">
+                            <div class="theme-emoji">🌸</div>
+                            <h4>Spiritual / Bhakti</h4>
+                            <p>Seva pages, pujaris, astrologers, temples</p>
+                        </button>
+                        <button type="button" class="theme-card" data-theme="fitness">
+                            <div class="theme-emoji">💪</div>
+                            <h4>Fitness / Coaching</h4>
+                            <p>Trainers, transformation programs, gyms</p>
+                        </button>
+                        <button type="button" class="theme-card" data-theme="diet">
+                            <div class="theme-emoji">🥗</div>
+                            <h4>Diet / Nutrition</h4>
+                            <p>Dietitians, meal plans, wellness coaches</p>
+                        </button>
+                        <button type="button" class="theme-card" data-theme="business">
+                            <div class="theme-emoji">💼</div>
+                            <h4>Business / Creator</h4>
+                            <p>Service businesses, freelancers, agencies</p>
+                        </button>
+                    </div>
+                    <div class="screen-actions">
+                        <button type="button" class="btn-builder-ghost" data-action="back">Back</button>
+                    </div>
+                </div>
+
+                <!-- ========== SCREEN 4: STYLE + COLOR ========== -->
+                <div class="builder-screen hidden" data-screen="style">
+                    <div class="screen-head">
+                        <h3>Choose a design style</h3>
+                        <p>Pick the vibe you want. Then select a color palette.</p>
+                    </div>
+
+                    <div class="style-label">Design style</div>
+                    <div class="style-grid">
+                        <button type="button" class="style-card" data-style="modern">
+                            <div class="style-preview style-modern"></div>
+                            <span>Modern</span>
+                        </button>
+                        <button type="button" class="style-card" data-style="minimal">
+                            <div class="style-preview style-minimal"></div>
+                            <span>Minimal</span>
+                        </button>
+                        <button type="button" class="style-card" data-style="premium">
+                            <div class="style-preview style-premium"></div>
+                            <span>Premium</span>
+                        </button>
+                        <button type="button" class="style-card" data-style="bold">
+                            <div class="style-preview style-bold"></div>
+                            <span>Bold</span>
+                        </button>
+                    </div>
+
+                    <div class="style-label">Color palette</div>
+                    <div class="palette-grid">
+                        <button type="button" class="palette-swatch" data-palette="violet" title="Violet Glow">
+                            <span style="background:#7C3AED"></span><span style="background:#EC4899"></span><span style="background:#F59E0B"></span>
+                            <em>Violet Glow</em>
+                        </button>
+                        <button type="button" class="palette-swatch" data-palette="saffron" title="Saffron Bhakti">
+                            <span style="background:#F59E0B"></span><span style="background:#DC2626"></span><span style="background:#FDE68A"></span>
+                            <em>Saffron Bhakti</em>
+                        </button>
+                        <button type="button" class="palette-swatch" data-palette="emerald" title="Emerald Fresh">
+                            <span style="background:#10B981"></span><span style="background:#0891B2"></span><span style="background:#D1FAE5"></span>
+                            <em>Emerald Fresh</em>
+                        </button>
+                        <button type="button" class="palette-swatch" data-palette="rose" title="Rose Premium">
+                            <span style="background:#EC4899"></span><span style="background:#A855F7"></span><span style="background:#FCE7F3"></span>
+                            <em>Rose Premium</em>
+                        </button>
+                        <button type="button" class="palette-swatch" data-palette="midnight" title="Midnight Bold">
+                            <span style="background:#1E1B4B"></span><span style="background:#F59E0B"></span><span style="background:#6366F1"></span>
+                            <em>Midnight Bold</em>
+                        </button>
+                    </div>
+
+                    <div class="screen-actions">
+                        <button type="button" class="btn-builder-ghost" data-action="back">Back</button>
+                        <button type="button" class="btn-builder-primary" data-action="generate" disabled id="generate-btn">
+                            Generate Website <i class="ph-fill ph-magic-wand"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ========== SCREEN 5: LOADING / GENERATION ========== -->
+                <div class="builder-screen hidden" data-screen="loading">
                     <div class="build-hero-anim">
                         <div class="circle-progress-wrap">
                             <svg class="circle-progress-svg" viewBox="0 0 120 120">
@@ -313,64 +416,169 @@
                             </div>
                         </div>
                     </div>
-                    <h3 class="build-title">Building Your Website<span class="build-dots"><span>.</span><span>.</span><span>.</span></span></h3>
-                    <p class="build-subtitle">Our AI is crafting something incredible</p>
-                    <ul class="progress-steps" id="progress-steps"></ul>
+                    <h3 class="build-title">Crafting your website<span class="build-dots"><span>.</span><span>.</span><span>.</span></span></h3>
+                    <p class="build-subtitle">Our AI is designing something beautiful for you</p>
+                    <ul class="progress-steps" id="progress-steps">
+                        <li data-step="1"><i class="ph ph-circle-dashed"></i> Analyzing your idea</li>
+                        <li data-step="2"><i class="ph ph-circle-dashed"></i> Picking the perfect layout</li>
+                        <li data-step="3"><i class="ph ph-circle-dashed"></i> Writing your content</li>
+                        <li data-step="4"><i class="ph ph-circle-dashed"></i> Applying design &amp; colors</li>
+                        <li data-step="5"><i class="ph ph-circle-dashed"></i> Optimizing for mobile &amp; SEO</li>
+                    </ul>
                 </div>
 
-                <!-- RESULT SCREEN with Confetti -->
-                <div class="result-screen hidden" id="result-screen">
+                <!-- ========== SCREEN 6: PREVIEW + PRD ========== -->
+                <div class="builder-screen hidden" data-screen="preview">
                     <canvas id="confetti-canvas" class="confetti-canvas"></canvas>
-
-                    <div class="result-badge"><i class="ph-fill ph-trophy"></i> Website Created!</div>
-                    <h3>Meet <span id="preview-name">Your</span>'s Website</h3>
-
-                    <div class="result-xp-summary">
-                        <div class="xp-earned"><i class="ph-fill ph-lightning"></i> 300 XP Earned</div>
-                        <div class="xp-rank">Rank: <strong>Website Visionary</strong></div>
+                    <div class="preview-head">
+                        <div class="result-badge"><i class="ph-fill ph-check-circle"></i> Website Generated!</div>
+                        <h3>Your live preview is ready</h3>
+                        <p>Scroll the phone below to see your actual site. Then review your Product Plan (PRD) on the right.</p>
                     </div>
 
-                    <div class="preview-wrapper">
-                        <div class="preview-phone-frame">
-                            <div class="preview-notch"></div>
-                            <div class="preview-screen">
-                                <div class="preview-brand-icon"><i class="ph-fill ph-sparkle"></i></div>
-                                <div class="preview-brand-name" id="preview-brand-name">Your Brand</div>
-                                <div class="preview-tagline" id="preview-tagline">Your idea, live online</div>
-                                <div class="preview-divider"></div>
-                                <div class="preview-features">
-                                    <span><i class="ph-fill ph-check"></i> Mobile-first</span>
-                                    <span><i class="ph-fill ph-check"></i> WhatsApp Ready</span>
-                                    <span><i class="ph-fill ph-check"></i> SEO Optimized</span>
+                    <div class="preview-layout">
+                        <!-- Live scrollable phone preview -->
+                        <div class="preview-phone-wrap">
+                            <div class="live-phone">
+                                <div class="live-phone-notch"></div>
+                                <div class="live-phone-screen" id="live-preview-screen">
+                                    <!-- Dynamically injected by builder.js -->
                                 </div>
-                                <div class="preview-wa-btn">
-                                    <i class="ph-fill ph-whatsapp-logo"></i> Chat on WhatsApp
-                                </div>
-                                <div class="preview-footer">vrindahitwebsite.com</div>
+                            </div>
+                            <a href="#" id="open-full-preview" class="link-full-preview" target="_blank" rel="noopener">
+                                <i class="ph ph-arrow-square-out"></i> Open full preview in new tab
+                            </a>
+                        </div>
+
+                        <!-- PRD Panel -->
+                        <div class="prd-panel">
+                            <div class="prd-header">
+                                <span class="prd-tag">📄 Product Plan</span>
+                                <h4 id="prd-title">Your Website PRD</h4>
+                                <p id="prd-purpose" class="prd-purpose">—</p>
+                            </div>
+
+                            <div class="prd-block">
+                                <h5>🧩 Sections &amp; Purpose</h5>
+                                <ul class="prd-sections" id="prd-sections"></ul>
+                            </div>
+
+                            <div class="prd-block">
+                                <h5>🎯 Conversion Logic</h5>
+                                <p id="prd-conversion">—</p>
+                            </div>
+
+                            <div class="prd-block">
+                                <h5>⚙️ Tech &amp; Delivery</h5>
+                                <ul class="prd-tech">
+                                    <li>Mobile-first responsive design</li>
+                                    <li>WhatsApp-integrated CTA</li>
+                                    <li>SEO meta tags + schema</li>
+                                    <li>Hosted on Vercel (lightning-fast)</li>
+                                    <li><strong>Timeline: 24 hours after approval</strong></li>
+                                </ul>
                             </div>
                         </div>
                     </div>
 
-                    <div class="result-info">
-                        <p class="result-line"><i class="ph-fill ph-sparkle"></i> <strong>This is just a preview.</strong> Get the full professional design, custom sections, testimonials, gallery &amp; your own domain — delivered in 24 hours.</p>
-                        <div class="result-pricing">
-                            <div class="price-tag">
-                                <span class="price-label">Starting at</span>
-                                <span class="price-value">₹299</span>
-                                <span class="price-unit">one-time</span>
-                            </div>
+                    <div class="preview-actions">
+                        <button type="button" class="btn-builder-ghost" data-action="edit-details">
+                            <i class="ph ph-pencil-simple"></i> Edit details
+                        </button>
+                        <button type="button" class="btn-builder-primary" data-action="go-pricing">
+                            Continue to Unlock <i class="ph-fill ph-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ========== SCREEN 7: PRICING ========== -->
+                <div class="builder-screen hidden" data-screen="pricing">
+                    <div class="screen-head">
+                        <h3>Unlock your website 🔓</h3>
+                        <p>Your preview is ready. Pick a plan to get your website built &amp; delivered live.</p>
+                    </div>
+
+                    <div class="pricing-grid">
+                        <div class="pricing-card" data-plan="basic">
+                            <div class="plan-name">Basic</div>
+                            <div class="plan-price"><span class="rupee">₹</span>299<span class="plan-unit">/one-time</span></div>
+                            <ul class="plan-features">
+                                <li><i class="ph-fill ph-check"></i> 1-page website</li>
+                                <li><i class="ph-fill ph-check"></i> WhatsApp button</li>
+                                <li><i class="ph-fill ph-check"></i> Mobile-first design</li>
+                                <li><i class="ph-fill ph-check"></i> Hosted on Vercel (free)</li>
+                            </ul>
+                            <button type="button" class="btn-plan" data-action="select-plan" data-plan="basic">Choose Basic</button>
+                        </div>
+
+                        <div class="pricing-card popular" data-plan="premium">
+                            <div class="popular-badge">⭐ Most Popular</div>
+                            <div class="plan-name">Premium</div>
+                            <div class="plan-price"><span class="rupee">₹</span>999<span class="plan-unit">/one-time</span></div>
+                            <ul class="plan-features">
+                                <li><i class="ph-fill ph-check"></i> Multi-section premium design</li>
+                                <li><i class="ph-fill ph-check"></i> Higher-conversion layout</li>
+                                <li><i class="ph-fill ph-check"></i> Gallery + testimonials</li>
+                                <li><i class="ph-fill ph-check"></i> Priority support</li>
+                                <li><i class="ph-fill ph-check"></i> SEO optimization</li>
+                            </ul>
+                            <button type="button" class="btn-plan btn-plan-primary" data-action="select-plan" data-plan="premium">Choose Premium</button>
+                        </div>
+
+                        <div class="pricing-card" data-plan="pro">
+                            <div class="plan-name">Pro</div>
+                            <div class="plan-price"><span class="rupee">₹</span>1999<span class="plan-unit">/one-time</span></div>
+                            <ul class="plan-features">
+                                <li><i class="ph-fill ph-check"></i> Everything in Premium</li>
+                                <li><i class="ph-fill ph-check"></i> Custom <code>.com</code> domain</li>
+                                <li><i class="ph-fill ph-check"></i> SSL + full branding</li>
+                                <li><i class="ph-fill ph-check"></i> Logo polish</li>
+                                <li><i class="ph-fill ph-check"></i> 7-day post-launch support</li>
+                            </ul>
+                            <button type="button" class="btn-plan" data-action="select-plan" data-plan="pro">Choose Pro</button>
                         </div>
                     </div>
 
+                    <p class="pricing-note"><i class="ph-fill ph-shield-check"></i> Zero risk — we confirm your design on WhatsApp before you pay a single rupee.</p>
+
+                    <div class="screen-actions">
+                        <button type="button" class="btn-builder-ghost" data-action="back-to-preview">
+                            <i class="ph ph-arrow-left"></i> Back to preview
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ========== SCREEN 8: CONTACT + CLAIM ========== -->
+                <div class="builder-screen hidden" data-screen="contact">
+                    <div class="screen-head">
+                        <h3>Almost there! 🎉</h3>
+                        <p>Share your contact so we can deliver your <strong id="selected-plan-label">Premium</strong> website in 24 hours.</p>
+                    </div>
+                    <input type="email" id="email-input" class="builder-input" placeholder="Your email" required>
+                    <input type="tel" id="phone-input" class="builder-input" placeholder="WhatsApp number (with country code)" required>
+                    <div class="plan-summary" id="plan-summary"></div>
                     <a href="#" id="claim-btn" class="btn-whatsapp btn-large claim-cta" target="_blank">
                         <i class="ph-fill ph-whatsapp-logo"></i> Claim My Website Now
                     </a>
-                    <p class="claim-hint"><i class="ph-fill ph-shield-check"></i> No payment until you approve. Zero risk.</p>
+                    <p class="claim-hint"><i class="ph-fill ph-shield-check"></i> Opens WhatsApp with all your details pre-filled. We reach out within minutes.</p>
+                    <div class="screen-actions">
+                        <button type="button" class="btn-builder-ghost" data-action="back-to-pricing">
+                            <i class="ph ph-arrow-left"></i> Change plan
+                        </button>
+                    </div>
+                </div>
 
-                    <button class="restart-btn" id="restart-btn">
-                        <i class="ph ph-arrow-counter-clockwise"></i> Try with a different idea
+                <!-- ========== SCREEN 9: SUCCESS ========== -->
+                <div class="builder-screen hidden" data-screen="success">
+                    <div class="success-icon"><i class="ph-fill ph-check-circle"></i></div>
+                    <h3>Request sent! 🚀</h3>
+                    <p>Check your WhatsApp — we've received your request and will message you within minutes to confirm your design.</p>
+                    <div class="success-summary" id="success-summary"></div>
+                    <button type="button" class="btn-builder-ghost" data-action="restart">
+                        <i class="ph ph-arrow-counter-clockwise"></i> Build another website
                     </button>
                 </div>
+
             </div>
         </div>
     </section>

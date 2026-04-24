@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Website Preview — Vrinda Hit</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/jpeg" href="/Vrinda-Hit-Website-logo.jpeg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: var(--p-font, 'Inter', sans-serif);
+            color: var(--p-text, #1E1B4B);
+            background: var(--p-bg, #fff);
+            line-height: 1.5;
+        }
+
+        /* Top banner */
+        .fp-banner {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            background: linear-gradient(135deg, #1E1B4B, #4C1D95);
+            color: #fff; padding: 10px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 10px; font-size: 0.85rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+        .fp-banner .fp-label { display: flex; align-items: center; gap: 8px; }
+        .fp-banner .fp-label i { color: #F59E0B; }
+        .fp-banner a {
+            color: #fff; background: rgba(255,255,255,0.15);
+            padding: 6px 14px; border-radius: 999px;
+            text-decoration: none; font-weight: 600;
+            transition: background 0.2s;
+        }
+        .fp-banner a:hover { background: rgba(255,255,255,0.25); }
+
+        .fp-content { padding-top: 48px; }
+
+        /* Full-page preview styles (reuse lp-* from main styles) */
+        .fp-page { max-width: 720px; margin: 0 auto; padding: 24px; }
+
+        .fp-nav {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 18px 0; border-bottom: 1px solid rgba(0,0,0,0.08);
+            margin-bottom: 24px;
+        }
+        .fp-logo {
+            font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.15rem;
+            display: flex; align-items: center; gap: 8px; color: var(--p-text);
+        }
+        .fp-logo i { color: var(--p-primary); font-size: 1.4rem; }
+
+        .fp-hero {
+            padding: 60px 20px 50px; text-align: center;
+            background: linear-gradient(180deg, var(--p-soft, #F5F0FF) 0%, var(--p-bg, #fff) 100%);
+            border-radius: var(--p-radius, 16px); margin-bottom: 24px;
+        }
+        .fp-pill {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 6px 14px; background: var(--p-bg);
+            color: var(--p-primary); font-size: 0.78rem; font-weight: 600;
+            border-radius: 999px; margin-bottom: 16px;
+            border: 1px solid color-mix(in srgb, var(--p-primary) 30%, transparent);
+        }
+        .fp-hero h1 {
+            font-family: 'Outfit', sans-serif; font-weight: 800;
+            font-size: 2.4rem; line-height: 1.15; margin-bottom: 14px;
+            color: var(--p-text);
+        }
+        .fp-hero-sub {
+            font-size: 1.05rem; opacity: 0.75; max-width: 520px; margin: 0 auto 24px;
+        }
+        .fp-cta {
+            padding: 14px 28px; border-radius: var(--p-btn-radius, 12px);
+            border: none; font-size: 1rem; font-weight: 700; cursor: pointer;
+            display: inline-flex; align-items: center; gap: 8px;
+            background: var(--p-primary); color: #fff;
+            box-shadow: 0 6px 20px color-mix(in srgb, var(--p-primary) 40%, transparent);
+            font-family: inherit;
+        }
+        .fp-trust {
+            display: flex; justify-content: center; gap: 20px;
+            margin-top: 18px; font-size: 0.85rem; opacity: 0.7;
+        }
+        .fp-trust i { color: var(--p-primary); }
+
+        .fp-section {
+            padding: 40px 20px; max-width: 640px; margin: 0 auto;
+        }
+        .fp-tag {
+            display: inline-block; font-size: 0.72rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.12em;
+            color: var(--p-primary); margin-bottom: 6px;
+        }
+        .fp-section h2 {
+            font-family: 'Outfit', sans-serif; font-weight: 800;
+            font-size: 1.7rem; color: var(--p-text); margin-bottom: 20px;
+        }
+        .fp-services { display: flex; flex-direction: column; gap: 12px; }
+        .fp-service {
+            display: flex; align-items: center; gap: 16px;
+            padding: 18px 20px; background: var(--p-soft);
+            border-radius: var(--p-radius, 14px);
+            border: 1px solid color-mix(in srgb, var(--p-primary) 15%, transparent);
+        }
+        .fp-service-icon {
+            width: 48px; height: 48px; border-radius: 12px;
+            background: var(--p-primary); color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.4rem; flex-shrink: 0;
+        }
+        .fp-service-body { flex: 1; }
+        .fp-service-name { font-weight: 700; font-size: 1.05rem; margin-bottom: 2px; color: var(--p-text); }
+        .fp-service-price { font-size: 0.9rem; color: var(--p-accent); font-weight: 600; }
+
+        .fp-about p { font-size: 1rem; line-height: 1.7; opacity: 0.85; }
+
+        .fp-testimonial {
+            background: var(--p-soft); padding: 32px;
+            border-radius: var(--p-radius, 14px); position: relative;
+        }
+        .fp-testimonial::before {
+            content: "\201C"; position: absolute; top: 0; left: 16px;
+            font-size: 4rem; color: var(--p-primary); opacity: 0.2;
+            font-family: serif; line-height: 1;
+        }
+        .fp-testimonial p { font-size: 1.05rem; font-style: italic; line-height: 1.6; }
+
+        .fp-cta-section {
+            background: linear-gradient(135deg, var(--p-primary), var(--p-accent));
+            color: #fff; padding: 48px 24px; text-align: center;
+            border-radius: var(--p-radius, 14px); margin: 24px 0;
+        }
+        .fp-cta-section h2 { color: #fff; margin-bottom: 8px; }
+        .fp-cta-section p { opacity: 0.92; margin-bottom: 20px; }
+        .fp-cta-section .fp-cta { background: #fff; color: var(--p-primary); }
+
+        .fp-footer {
+            padding: 24px; text-align: center;
+            border-top: 1px solid rgba(0,0,0,0.08);
+            font-size: 0.82rem; opacity: 0.6;
+        }
+
+        @media (max-width: 640px) {
+            .fp-hero h1 { font-size: 1.8rem; }
+            .fp-hero-sub { font-size: 0.95rem; }
+            .fp-section h2 { font-size: 1.4rem; }
+        }
+
+        .fp-missing {
+            max-width: 500px; margin: 120px auto;
+            text-align: center; padding: 40px;
+            background: #F5F0FF; border-radius: 20px;
+        }
+        .fp-missing h2 { margin-bottom: 12px; }
+        .fp-missing a {
+            display: inline-block; margin-top: 14px;
+            background: #7C3AED; color: #fff; padding: 10px 20px;
+            border-radius: 10px; text-decoration: none; font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="fp-banner">
+        <div class="fp-label">
+            <i class="ph-fill ph-eye"></i>
+            <span>Live Preview — this is how your real website will look</span>
+        </div>
+        <a href="/#builder">← Back to builder</a>
+    </div>
+
+    <div class="fp-content" id="fp-content">
+        <!-- Injected by JS below -->
+    </div>
+
+    <script>
+        const THEMES = {
+            spiritual: {
+                label: 'Spiritual / Bhakti', icon: 'ph-flower-lotus', audience: 'devotees', action: 'book pooja or seva',
+                servicesLabel: 'Seva & Services',
+                services: [
+                    { icon: 'ph-flower-lotus', name: 'Pooja Booking', price: '₹501 onwards' },
+                    { icon: 'ph-moon-stars', name: 'Kundli Consultation', price: '₹1,100' },
+                    { icon: 'ph-users-three', name: 'Live Satsang Access', price: '₹251/month' }
+                ],
+                testimonial: '"Finally a professional home for my Bhakti seva. Devotees from abroad can now book easily." — Radhe Sevak, Vrindavan',
+                sampleHero: 'Radhe Radhe 🙏 Bringing devotional seva online.',
+                ctaText: 'Book Seva on WhatsApp'
+            },
+            fitness: {
+                label: 'Fitness / Coaching', icon: 'ph-barbell', audience: 'clients', action: 'book a coaching call',
+                servicesLabel: 'Programs',
+                services: [
+                    { icon: 'ph-barbell', name: '1-on-1 Coaching', price: '₹4,999/month' },
+                    { icon: 'ph-flag-banner', name: '12-Week Transformation', price: '₹9,999' },
+                    { icon: 'ph-users-three', name: 'Group Boot Camp', price: '₹1,999/month' }
+                ],
+                testimonial: '"I lost 18kg and got my life back. The coaching is 1000% worth it." — Priya, Delhi',
+                sampleHero: 'Build the body you\'ve always wanted.',
+                ctaText: 'Start Free Trial'
+            },
+            diet: {
+                label: 'Diet / Nutrition', icon: 'ph-leaf', audience: 'wellness seekers', action: 'book a diet consultation',
+                servicesLabel: 'Nutrition Plans',
+                services: [
+                    { icon: 'ph-leaf', name: 'Personalized Meal Plan', price: '₹2,499' },
+                    { icon: 'ph-scales', name: 'Weight Loss Program', price: '₹5,999' },
+                    { icon: 'ph-heart', name: 'PCOS & Hormone Plan', price: '₹3,999' }
+                ],
+                testimonial: '"Lost 12kg in 4 months with zero starvation. Real food, real results." — Meera, Mumbai',
+                sampleHero: 'Nutrition that fits your life, not the other way around.',
+                ctaText: 'Book Free Call'
+            },
+            business: {
+                label: 'Business / Creator', icon: 'ph-briefcase', audience: 'customers', action: 'reach out for a quote',
+                servicesLabel: 'Our Services',
+                services: [
+                    { icon: 'ph-rocket-launch', name: 'Flagship Service', price: 'From ₹9,999' },
+                    { icon: 'ph-chart-line-up', name: 'Growth Package', price: 'From ₹24,999' },
+                    { icon: 'ph-handshake', name: 'Consultation Call', price: '₹1,499' }
+                ],
+                testimonial: '"Their service 3x\'d my revenue in 6 months. Can\'t recommend enough." — Arjun, Founder',
+                sampleHero: 'Modern solutions for ambitious businesses.',
+                ctaText: 'Get in Touch'
+            }
+        };
+        const PALETTES = {
+            violet:   { primary: '#7C3AED', accent: '#EC4899', soft: '#F5F0FF', text: '#1E1B4B', bg: '#FFFFFF' },
+            saffron:  { primary: '#F59E0B', accent: '#DC2626', soft: '#FFFBEB', text: '#7C2D12', bg: '#FFFDF7' },
+            emerald:  { primary: '#10B981', accent: '#0891B2', soft: '#D1FAE5', text: '#064E3B', bg: '#FFFFFF' },
+            rose:     { primary: '#EC4899', accent: '#A855F7', soft: '#FCE7F3', text: '#831843', bg: '#FFFFFF' },
+            midnight: { primary: '#6366F1', accent: '#F59E0B', soft: '#E0E7FF', text: '#1E1B4B', bg: '#F8FAFC' }
+        };
+        const STYLES = {
+            modern:  { radius: '14px', buttonShape: '12px',  font: "'Outfit', sans-serif" },
+            minimal: { radius: '4px',  buttonShape: '4px',   font: "'Inter', sans-serif" },
+            premium: { radius: '24px', buttonShape: '999px', font: "'Outfit', serif" },
+            bold:    { radius: '0px',  buttonShape: '0px',   font: "'Outfit', sans-serif" }
+        };
+
+        function escapeHtml(s) {
+            return String(s == null ? '' : s)
+                .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+        }
+
+        function render() {
+            let data;
+            try { data = JSON.parse(sessionStorage.getItem('vrindaBuilderState') || '{}'); } catch (e) { data = {}; }
+
+            const container = document.getElementById('fp-content');
+            if (!data.theme || !data.style || !data.palette) {
+                container.innerHTML = `
+                    <div class="fp-missing">
+                        <h2>No preview available</h2>
+                        <p>It looks like you haven't built a website yet. Go back to the builder and generate your preview first.</p>
+                        <a href="/#builder">Start Building →</a>
+                    </div>`;
+                return;
+            }
+
+            const theme = THEMES[data.theme];
+            const palette = PALETTES[data.palette];
+            const style = STYLES[data.style];
+            const brandName = (data.brand || '').trim() || (data.idea || 'Your').split(/\s+/)[0].replace(/[^a-zA-Z]/g,'') || 'Your Brand';
+            const idea = (data.idea || 'Your idea, beautifully online.').trim();
+
+            // Apply palette as CSS vars
+            const root = document.documentElement;
+            root.style.setProperty('--p-primary', palette.primary);
+            root.style.setProperty('--p-accent', palette.accent);
+            root.style.setProperty('--p-soft', palette.soft);
+            root.style.setProperty('--p-text', palette.text);
+            root.style.setProperty('--p-bg', palette.bg);
+            root.style.setProperty('--p-radius', style.radius);
+            root.style.setProperty('--p-btn-radius', style.buttonShape);
+            root.style.setProperty('--p-font', style.font);
+            document.title = `${brandName} — Website Preview`;
+
+            const servicesHtml = theme.services.map(s => `
+                <div class="fp-service">
+                    <div class="fp-service-icon"><i class="ph-fill ${s.icon}"></i></div>
+                    <div class="fp-service-body">
+                        <div class="fp-service-name">${escapeHtml(s.name)}</div>
+                        <div class="fp-service-price">${escapeHtml(s.price)}</div>
+                    </div>
+                </div>
+            `).join('');
+
+            container.innerHTML = `
+                <div class="fp-page">
+                    <nav class="fp-nav">
+                        <div class="fp-logo"><i class="ph-fill ${theme.icon}"></i> ${escapeHtml(brandName)}</div>
+                    </nav>
+
+                    <section class="fp-hero">
+                        <div class="fp-pill"><i class="ph ph-sparkle"></i> ${escapeHtml(theme.label)}</div>
+                        <h1>${escapeHtml(theme.sampleHero)}</h1>
+                        <p class="fp-hero-sub">${escapeHtml(idea)}</p>
+                        <button class="fp-cta"><i class="ph-fill ph-whatsapp-logo"></i> ${escapeHtml(theme.ctaText)}</button>
+                        <div class="fp-trust">
+                            <span><i class="ph-fill ph-check-circle"></i> Trusted by 500+</span>
+                            <span><i class="ph-fill ph-star"></i> 4.9 / 5 rating</span>
+                        </div>
+                    </section>
+
+                    <section class="fp-section">
+                        <span class="fp-tag">${escapeHtml(theme.servicesLabel)}</span>
+                        <h2>What we offer</h2>
+                        <div class="fp-services">${servicesHtml}</div>
+                    </section>
+
+                    <section class="fp-section fp-about">
+                        <span class="fp-tag">About</span>
+                        <h2>About ${escapeHtml(brandName)}</h2>
+                        <p>${escapeHtml(idea)}</p>
+                    </section>
+
+                    <section class="fp-section">
+                        <span class="fp-tag">Testimonial</span>
+                        <div class="fp-testimonial">
+                            <p>${escapeHtml(theme.testimonial)}</p>
+                        </div>
+                    </section>
+
+                    <section class="fp-cta-section">
+                        <h2>Ready to get started?</h2>
+                        <p>Chat with us on WhatsApp — we reply in minutes.</p>
+                        <button class="fp-cta"><i class="ph-fill ph-whatsapp-logo"></i> ${escapeHtml(theme.ctaText)}</button>
+                    </section>
+
+                    <footer class="fp-footer">
+                        © ${new Date().getFullYear()} ${escapeHtml(brandName)} · Built with ✨ by vrindahitwebsite.com
+                    </footer>
+                </div>
+            `;
+        }
+
+        render();
+    </script>
+
+</body>
+</html>
