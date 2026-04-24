@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Site Generator — Vrinda Hit (Internal)</title>
+    <meta name="robots" content="noindex, nofollow">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', system-ui, sans-serif; }
+        body { background: linear-gradient(135deg, #0F0A1E, #4C1D95); color: #fff; min-height: 100vh; padding: 40px 20px; }
+        .wrap { max-width: 720px; margin: 0 auto; }
+        h1 { font-size: 1.8rem; margin-bottom: 8px; }
+        .sub { opacity: .7; margin-bottom: 28px; }
+        .card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 16px; padding: 28px; backdrop-filter: blur(8px); }
+        label { display: block; font-size: 0.85rem; margin: 12px 0 6px; opacity: .8; font-weight: 600; }
+        input, textarea, select {
+            width: 100%; padding: 12px 14px; border-radius: 10px;
+            border: 1.5px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.05);
+            color: #fff; font-size: 0.95rem; font-family: inherit;
+        }
+        input:focus, textarea:focus, select:focus { outline: none; border-color: #7C3AED; }
+        .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        textarea { resize: vertical; min-height: 80px; }
+        button {
+            margin-top: 20px; width: 100%;
+            padding: 14px 22px; font-weight: 700; font-size: 1rem;
+            background: linear-gradient(135deg, #7C3AED, #EC4899);
+            color: #fff; border: none; border-radius: 12px; cursor: pointer;
+            transition: transform .15s;
+        }
+        button:hover:not(:disabled) { transform: translateY(-1px); }
+        button:disabled { opacity: .5; cursor: not-allowed; }
+        .result {
+            margin-top: 20px; padding: 20px; border-radius: 12px;
+            background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);
+            font-family: ui-monospace, monospace; font-size: 0.82rem;
+            white-space: pre-wrap; word-break: break-all; display: none;
+        }
+        .result.show { display: block; }
+        .result.ok { border-color: #10B981; }
+        .result.err { border-color: #EF4444; color: #FCA5A5; }
+        a.open {
+            display: inline-block; margin-top: 12px;
+            padding: 8px 14px; background: #10B981;
+            color: #fff; text-decoration: none; border-radius: 8px;
+            font-weight: 600; font-size: 0.88rem;
+        }
+        .loading { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.8s linear infinite; vertical-align: middle; margin-right: 6px;}
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <h1>🧪 AI Site Generator — Test Console</h1>
+        <p class="sub">Internal testing page. Triggers /api/generate with sample data. Not linked from the public site.</p>
+
+        <div class="card">
+            <label>Idea / Description</label>
+            <textarea id="idea" placeholder="I run a Bhakti seva in Vrindavan, offering daily Thakur ji seva, online satsang and spiritual consultations...">I run a devotional Bhakti seva in Vrindavan offering daily Thakur ji shringar seva, online satsang, and kundli consultations for devotees worldwide.</textarea>
+
+            <div class="row">
+                <div>
+                    <label>Brand name (optional)</label>
+                    <input id="brand" placeholder="Radha Seva" value="Radha Seva Vrindavan">
+                </div>
+                <div>
+                    <label>Plan</label>
+                    <select id="plan">
+                        <option value="basic">Basic (₹299 — 4 sections)</option>
+                        <option value="premium" selected>Premium (₹999 — 7 sections)</option>
+                        <option value="pro">Pro (₹1999 — 8 sections)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div>
+                    <label>Theme</label>
+                    <select id="theme">
+                        <option value="spiritual" selected>Spiritual / Bhakti</option>
+                        <option value="fitness">Fitness / Coaching</option>
+                        <option value="diet">Diet / Nutrition</option>
+                        <option value="business">Business / Creator</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Style</label>
+                    <select id="style">
+                        <option value="modern">Modern</option>
+                        <option value="minimal">Minimal</option>
+                        <option value="premium" selected>Premium</option>
+                        <option value="bold">Bold</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div>
+                    <label>Palette</label>
+                    <select id="palette">
+                        <option value="violet">Violet Glow</option>
+                        <option value="saffron" selected>Saffron Bhakti</option>
+                        <option value="emerald">Emerald Fresh</option>
+                        <option value="rose">Rose Premium</option>
+                        <option value="midnight">Midnight Bold</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Contact WhatsApp</label>
+                    <input id="phone" value="+91 75054 83523">
+                </div>
+            </div>
+
+            <label>Customer email (optional)</label>
+            <input id="email" placeholder="test@example.com" value="test@example.com">
+
+            <button id="gen-btn" type="button" onclick="generate()">⚡ Generate website</button>
+
+            <div id="result" class="result"></div>
+        </div>
+    </div>
+
+    <script>
+        async function generate() {
+            const btn = document.getElementById('gen-btn');
+            const result = document.getElementById('result');
+            result.className = 'result show';
+            result.innerHTML = '<span class="loading"></span> Calling Claude… this usually takes 20–45 seconds.';
+            btn.disabled = true;
+
+            const payload = {
+                idea: document.getElementById('idea').value,
+                brand: document.getElementById('brand').value,
+                theme: document.getElementById('theme').value,
+                style: document.getElementById('style').value,
+                palette: document.getElementById('palette').value,
+                plan: document.getElementById('plan').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                orderId: 'test-' + Date.now()
+            };
+
+            const t0 = Date.now();
+            try {
+                const resp = await fetch('/api/generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await resp.json();
+                const elapsed = ((Date.now() - t0) / 1000).toFixed(1);
+
+                if (resp.ok && data.ok) {
+                    result.className = 'result show ok';
+                    result.innerHTML =
+                        `✅ Success in ${elapsed}s\n\n` +
+                        `Slug: ${data.slug}\n` +
+                        `URL:  ${data.url}\n` +
+                        `Tokens: in=${data.meta.tokensIn}, out=${data.meta.tokensOut}\n` +
+                        `Size: ${data.meta.sizeKb} KB\n\n` +
+                        `<a class="open" href="${data.url}" target="_blank">🚀 Open generated website</a>`;
+                } else {
+                    result.className = 'result show err';
+                    result.textContent = `❌ Error (${resp.status})\n\n` + JSON.stringify(data, null, 2);
+                }
+            } catch (err) {
+                result.className = 'result show err';
+                result.textContent = '❌ Network error: ' + err.message;
+            }
+            btn.disabled = false;
+        }
+    </script>
+</body>
+</html>

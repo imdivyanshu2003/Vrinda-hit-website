@@ -1,0 +1,18 @@
+{
+  "name": "vrinda-hit-website",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AI-powered website builder SaaS — Vrinda Hit Website",
+  "type": "module",
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.32.1",
+    "@vercel/blob": "^0.27.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

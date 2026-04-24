@@ -1,0 +1,25 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "rewrites": [
+    { "source": "/s/:slug", "destination": "/api/site/:slug" },
+    { "source": "/s/:slug/", "destination": "/api/site/:slug" }
+  ],
+  "functions": {
+    "api/generate.js": {
+      "maxDuration": 60,
+      "memory": 1024
+    },
+    "api/site/[slug].js": {
+      "maxDuration": 10,
+      "memory": 512
+    }
+  },
+  "headers": [
+    {
+      "source": "/s/:slug",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=300, s-maxage=3600" }
+      ]
+    }
+  ]
+}

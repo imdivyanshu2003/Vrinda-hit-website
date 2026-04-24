@@ -10,5 +10,7 @@ Thumbs.db
 # Node / build
 node_modules/
 dist/
+.vercel/
 .env
 .env.local
+.env*.local
