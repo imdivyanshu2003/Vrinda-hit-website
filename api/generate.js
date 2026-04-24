@@ -1,12 +1,13 @@
 // ============================================================
 //  VRINDA HIT — AI WEBSITE GENERATION ENDPOINT
 //  POST /api/generate
-//  Calls Claude API to produce a complete single-file HTML website
-//  and stores it in Vercel Blob storage. Returns { slug, url }.
+//  Calls Claude API to produce a complete single-file HTML website,
+//  uploads it to Supabase Storage, records a row in `sites`, and
+//  returns { slug, url }.
 // ============================================================
 
 import Anthropic from '@anthropic-ai/sdk';
-import { put } from '@vercel/blob';
+import { getSupabase, SITES_BUCKET } from './_lib/supabase.js';
 
 // -------- Theme knowledge (matches builder.js) --------
 const THEMES = {
@@ -211,20 +212,30 @@ export default async function handler(req, res) {
         const baseSlug = slugify(brand || idea.split(/\s+/).slice(0, 3).join(' '));
         const slug = uniqueSlug(baseSlug);
 
-        // Store in Vercel Blob as a public HTML file keyed by slug.
-        // We save under `sites/<slug>.html` so the [slug] route can fetch it.
-        const blob = await put(`sites/${slug}.html`, html, {
-            access: 'public',
-            contentType: 'text/html; charset=utf-8',
-            addRandomSuffix: false,
-            allowOverwrite: false
-        });
+        // ---------- Store in Supabase ----------
+        const supabase = getSupabase();
+        const storagePath = `${slug}.html`;
+        const htmlSizeBytes = Buffer.byteLength(html, 'utf8');
+        const tokensIn  = message.usage?.input_tokens  || 0;
+        const tokensOut = message.usage?.output_tokens || 0;
+        const latencyMs = Date.now() - startedAt;
 
-        // Also store a small metadata JSON for admin lookup
-        const meta = {
+        // 1. Upload HTML file to private bucket
+        const { error: uploadErr } = await supabase.storage
+            .from(SITES_BUCKET)
+            .upload(storagePath, html, {
+                contentType: 'text/html; charset=utf-8',
+                upsert: false
+            });
+        if (uploadErr) {
+            console.error('[generate] storage upload failed:', uploadErr);
+            return res.status(500).json({ error: 'Storage upload failed', message: uploadErr.message });
+        }
+
+        // 2. Insert row in `sites` table
+        const { error: insertErr } = await supabase.from('sites').insert({
             slug,
-            orderId: orderId || null,
-            createdAt: new Date().toISOString(),
+            order_id: orderId || null,
             brand: brand || null,
             idea,
             theme,
@@ -233,31 +244,37 @@ export default async function handler(req, res) {
             plan,
             email: email || null,
             phone: phone || null,
-            blobUrl: blob.url,
-            htmlSizeBytes: Buffer.byteLength(html, 'utf8'),
+            storage_path: storagePath,
+            html_size_bytes: htmlSizeBytes,
             model: message.model,
-            tokensIn: message.usage?.input_tokens || 0,
-            tokensOut: message.usage?.output_tokens || 0,
-            latencyMs: Date.now() - startedAt
-        };
-        await put(`meta/${slug}.json`, JSON.stringify(meta, null, 2), {
-            access: 'public',
-            contentType: 'application/json',
-            addRandomSuffix: false,
-            allowOverwrite: true
+            tokens_in: tokensIn,
+            tokens_out: tokensOut,
+            latency_ms: latencyMs
         });
+        if (insertErr) {
+            console.error('[generate] sites insert failed:', insertErr);
+            // Best-effort cleanup so we don't orphan the HTML file
+            try { await supabase.storage.from(SITES_BUCKET).remove([storagePath]); } catch (_) {}
+            return res.status(500).json({ error: 'DB insert failed', message: insertErr.message });
+        }
+
+        // 3. Mark the order as generated (if an orderId was provided)
+        if (orderId) {
+            await supabase.from('orders')
+                .update({ status: 'generated', slug, updated_at: new Date().toISOString() })
+                .eq('id', orderId);
+        }
 
         const publicUrl = `https://vrindahitwebsite.com/s/${slug}`;
         return res.status(200).json({
             ok: true,
             slug,
             url: publicUrl,
-            rawBlobUrl: blob.url,
             meta: {
-                tokensIn: meta.tokensIn,
-                tokensOut: meta.tokensOut,
-                latencyMs: meta.latencyMs,
-                sizeKb: Math.round(meta.htmlSizeBytes / 102.4) / 10
+                tokensIn,
+                tokensOut,
+                latencyMs,
+                sizeKb: Math.round(htmlSizeBytes / 102.4) / 10
             }
         });
     } catch (err) {

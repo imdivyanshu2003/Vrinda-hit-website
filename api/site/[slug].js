@@ -1,10 +1,10 @@
 // ============================================================
 //  VRINDA HIT — SERVE GENERATED SITE
 //  GET /s/<slug>  (rewritten to /api/site/<slug> by vercel.json)
-//  Streams the generated HTML stored in Vercel Blob.
+//  Streams the generated HTML stored in Supabase Storage.
 // ============================================================
 
-import { head } from '@vercel/blob';
+import { getSupabase, SITES_BUCKET } from '../_lib/supabase.js';
 
 export default async function handler(req, res) {
     const { slug } = req.query || {};
@@ -14,24 +14,33 @@ export default async function handler(req, res) {
     }
 
     try {
-        // Look up the blob metadata. This does NOT download the file itself,
-        // just tells us the public URL of the stored HTML.
-        const pathname = `sites/${slug}.html`;
-        let meta;
-        try {
-            meta = await head(pathname);
-        } catch (e) {
+        const supabase = getSupabase();
+
+        // 1. Look up the site row so we know the storage path + can log a view
+        const { data: site, error: lookupErr } = await supabase
+            .from('sites')
+            .select('slug, storage_path')
+            .eq('slug', slug)
+            .single();
+
+        if (lookupErr || !site) {
             return send404(res, 'This website could not be found.');
         }
 
-        if (!meta?.url) return send404(res, 'Storage returned no URL.');
+        // 2. Download the HTML file from private Storage
+        const { data: fileData, error: dlErr } = await supabase
+            .storage.from(SITES_BUCKET)
+            .download(site.storage_path);
 
-        // Fetch the HTML from Blob storage and stream it back as the response.
-        const upstream = await fetch(meta.url);
-        if (!upstream.ok) {
+        if (dlErr || !fileData) {
+            console.error('[serve-site] download failed:', dlErr);
             return send404(res, 'Site content is temporarily unavailable.');
         }
-        const html = await upstream.text();
+
+        const html = await fileData.text();
+
+        // 3. Fire-and-forget view counter (don't block response)
+        supabase.rpc('increment_site_view', { p_slug: slug }).then(() => {}, () => {});
 
         res.setHeader('Content-Type', 'text/html; charset=utf-8');
         res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=3600');
