@@ -999,7 +999,7 @@ a {
 }
 
 .chat-builder {
-    max-width: 560px;
+    max-width: 1000px;
     margin: 0 auto;
     background: rgba(15, 10, 30, 0.85);
     backdrop-filter: blur(20px);
@@ -1129,7 +1129,7 @@ a {
     display: flex;
     gap: 10px;
     align-items: flex-end;
-    max-width: 88%;
+    max-width: 500px;
     animation: msg-in 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -1372,8 +1372,13 @@ a {
 }
 
 /* Preview phone mockup */
+.preview-layout {
+    display: flex; gap: 40px; align-items: flex-start;
+    margin-bottom: 24px;
+}
+
 .preview-wrapper {
-    margin: 0 auto 24px;
+    flex: 0 0 auto;
     display: flex;
     justify-content: center;
 }
@@ -1529,6 +1534,11 @@ a {
 .restart-btn:hover { background: rgba(124, 58, 237, 0.15); }
 
 /* Responsive */
+@media (max-width: 900px) {
+    .preview-layout { flex-direction: column; gap: 24px; }
+    .theme-grid { grid-template-columns: 1fr 1fr; }
+    .style-grid { grid-template-columns: 1fr 1fr 1fr; }
+}
 @media (max-width: 640px) {
     .chat-messages {
         padding: 20px 16px;
@@ -1541,6 +1551,9 @@ a {
     .price-value { font-size: 1.7rem; }
     .result-screen { padding: 28px 18px 24px; }
     .result-screen h3 { font-size: 1.2rem; }
+    .theme-grid { grid-template-columns: 1fr; }
+    .style-grid { grid-template-columns: 1fr 1fr; }
+    .pricing-grid { grid-template-columns: 1fr; }
 }
 
 /* ====================
@@ -1653,7 +1666,7 @@ a {
 
 /* ========= Theme grid ========= */
 .theme-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
 }
 .theme-card {
     background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.1);
@@ -1681,7 +1694,7 @@ a {
     margin: 8px 0 10px;
 }
 .style-grid {
-    display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px;
 }
 .style-card {
     background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.1);
@@ -1998,12 +2011,16 @@ a {
 }
 
 /* PRD Panel */
+.preview-prd {
+    flex: 1; min-width: 0; text-align: left;
+}
 .prd-panel {
     background: rgba(255,255,255,0.04);
     border: 1px solid rgba(255,255,255,0.1);
     border-radius: 18px; padding: 22px;
     color: rgba(255,255,255,0.85);
     max-height: 580px; overflow-y: auto;
+    flex: 1; min-width: 0; text-align: left;
 }
 .prd-header { border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 14px; margin-bottom: 14px; }
 .prd-tag {
