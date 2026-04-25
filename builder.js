@@ -363,17 +363,37 @@
             <div class="lp-wrap">
                 <nav class="lp-nav">
                     <div class="lp-logo"><i class="ph-fill ${theme.icon}"></i> ${escapeHtml(brandName)}</div>
-                    <i class="ph ph-list"></i>
+                    <div class="lp-nav-actions">
+                        <button class="lp-nav-cta">Get Started</button>
+                        <i class="ph ph-list"></i>
+                    </div>
                 </nav>
 
                 <section class="lp-hero">
+                    <div class="lp-hero-avatar">
+                        <div class="lp-avatar-ring">
+                            <div class="lp-avatar-inner"><i class="ph-fill ${theme.icon}"></i></div>
+                        </div>
+                    </div>
                     <div class="lp-pill"><i class="ph ph-sparkle"></i> ${escapeHtml(theme.label)}</div>
                     <h1>${escapeHtml(theme.sampleHero)}</h1>
                     <p class="lp-hero-sub">${tagline || 'Your idea, beautifully online.'}</p>
-                    <button class="lp-cta lp-cta-primary"><i class="ph-fill ph-whatsapp-logo"></i> ${escapeHtml(theme.ctaText)}</button>
-                    <div class="lp-trust">
-                        <span><i class="ph-fill ph-check-circle"></i> Trusted by 500+</span>
-                        <span><i class="ph-fill ph-star"></i> 4.9 / 5</span>
+                    <button class="lp-cta lp-cta-primary"><i class="ph-fill ph-arrow-right"></i> ${escapeHtml(theme.ctaText)}</button>
+                    <div class="lp-stats-row">
+                        <div class="lp-stat">
+                            <span class="lp-stat-num">500+</span>
+                            <span class="lp-stat-label">Happy Clients</span>
+                        </div>
+                        <div class="lp-stat-divider"></div>
+                        <div class="lp-stat">
+                            <span class="lp-stat-num">4.9</span>
+                            <span class="lp-stat-label">Rating</span>
+                        </div>
+                        <div class="lp-stat-divider"></div>
+                        <div class="lp-stat">
+                            <span class="lp-stat-num">24h</span>
+                            <span class="lp-stat-label">Delivery</span>
+                        </div>
                     </div>
                 </section>
 
@@ -385,26 +405,56 @@
                     <div class="lp-services">${servicesHtml}</div>
                 </section>
 
+                <section class="lp-section lp-gallery-section">
+                    <div class="lp-section-head">
+                        <span class="lp-section-tag">Gallery</span>
+                        <h2>Our Work</h2>
+                    </div>
+                    <div class="lp-gallery">
+                        <div class="lp-gallery-item lp-gi-1"></div>
+                        <div class="lp-gallery-item lp-gi-2"></div>
+                        <div class="lp-gallery-item lp-gi-3"></div>
+                        <div class="lp-gallery-item lp-gi-4"></div>
+                        <div class="lp-gallery-item lp-gi-5"></div>
+                        <div class="lp-gallery-item lp-gi-6"></div>
+                    </div>
+                </section>
+
                 <section class="lp-section lp-about">
                     <div class="lp-section-head">
                         <span class="lp-section-tag">About</span>
                         <h2>About ${escapeHtml(brandName)}</h2>
                     </div>
                     <p>${escapeHtml(idea) || 'We help ' + theme.audience + ' get the results they deserve — with care, clarity, and quality.'}</p>
+                    <div class="lp-about-badges">
+                        <span class="lp-badge"><i class="ph-fill ph-medal"></i> Certified</span>
+                        <span class="lp-badge"><i class="ph-fill ph-shield-check"></i> Trusted</span>
+                        <span class="lp-badge"><i class="ph-fill ph-star"></i> Top Rated</span>
+                    </div>
                 </section>
 
                 <section class="lp-section lp-testimonial-section">
                     <div class="lp-quote-icon">"</div>
                     <p class="lp-testimonial">${escapeHtml(theme.testimonial)}</p>
+                    <div class="lp-reviewer">
+                        <div class="lp-reviewer-avatars">
+                            <div class="lp-reviewer-dot"></div>
+                            <div class="lp-reviewer-dot"></div>
+                            <div class="lp-reviewer-dot"></div>
+                        </div>
+                        <span class="lp-reviewer-label">100+ happy ${theme.audience}</span>
+                    </div>
                 </section>
 
                 <section class="lp-section lp-cta-section">
+                    <div class="lp-cta-glow"></div>
                     <h2>Ready to get started?</h2>
-                    <p>Chat with us on WhatsApp — we reply in minutes.</p>
-                    <button class="lp-cta lp-cta-primary"><i class="ph-fill ph-whatsapp-logo"></i> ${escapeHtml(theme.ctaText)}</button>
+                    <p>Get in touch — we reply in minutes.</p>
+                    <button class="lp-cta lp-cta-primary"><i class="ph-fill ph-arrow-right"></i> ${escapeHtml(theme.ctaText)}</button>
                 </section>
 
                 <footer class="lp-footer">
+                    <div class="lp-footer-brand"><i class="ph-fill ${theme.icon}"></i> ${escapeHtml(brandName)}</div>
                     <div>© ${new Date().getFullYear()} ${escapeHtml(brandName)}</div>
                     <div class="lp-footer-made">Built with ✨ by vrindahitwebsite.com</div>
                 </footer>
