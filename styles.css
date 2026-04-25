@@ -1540,6 +1540,7 @@ a {
     .style-grid { grid-template-columns: 1fr 1fr 1fr; }
 }
 @media (max-width: 640px) {
+    .builder-screen { padding: 24px 16px; }
     .chat-messages {
         padding: 20px 16px;
         min-height: 300px;
