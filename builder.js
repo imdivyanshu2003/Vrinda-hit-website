@@ -391,7 +391,7 @@
                         </div>
                         <div class="lp-stat-divider"></div>
                         <div class="lp-stat">
-                            <span class="lp-stat-num">24h</span>
+                            <span class="lp-stat-num">5m</span>
                             <span class="lp-stat-label">Delivery</span>
                         </div>
                     </div>
@@ -608,7 +608,7 @@
             summary.innerHTML = `
                 <div class="summary-row"><span>Brand</span><strong>${escapeHtml(brandName)}</strong></div>
                 <div class="summary-row"><span>Plan</span><strong>${plan.label}</strong></div>
-                <div class="summary-row"><span>Delivery</span><strong>Within 24 hours</strong></div>
+                <div class="summary-row"><span>Delivery</span><strong>Within 5 minutes</strong></div>
             `;
         }
     }
