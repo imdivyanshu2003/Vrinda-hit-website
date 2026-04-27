@@ -60,8 +60,7 @@ const STYLES = {
 
 const PLAN_FEATURES = {
     basic:   { sections: 4, tier: 'Basic',   notes: 'Single-page site with 4 sections, essential content only.' },
-    premium: { sections: 7, tier: 'Premium', notes: 'Full single-page site with 7 sections, animations, testimonials, FAQ.' },
-    pro:     { sections: 8, tier: 'Pro',     notes: 'Premium site + extra polish: FAQ accordion, newsletter, gallery grid. Delivered with custom .com setup.' }
+    premium: { sections: 7, tier: 'Premium', notes: 'Full single-page site with 7 sections, animations, testimonials, FAQ.' }
 };
 
 export const KNOWN = { THEMES, PALETTES, STYLES, PLAN_FEATURES };

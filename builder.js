@@ -99,8 +99,7 @@
 
     const PLANS = {
         basic:   { name: 'Basic',   price: 299,  label: 'Basic ₹299' },
-        premium: { name: 'Premium', price: 999,  label: 'Premium ₹999' },
-        pro:     { name: 'Pro',     price: 1999, label: 'Pro ₹1999 (with .com)' }
+        premium: { name: 'Premium', price: 999,  label: 'Premium ₹999' }
     };
 
     // -------- Flow mapping (for progress bar + step counter) --------

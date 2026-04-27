@@ -9,7 +9,7 @@
 import { getSupabase } from '../_lib/supabase.js';
 import { createCashfreeOrder, cashfreeMode } from '../_lib/cashfree.js';
 
-const PLANS = { basic: 299, premium: 999, pro: 1999 };
+const PLANS = { basic: 299, premium: 999 };
 const VALID_THEMES   = ['spiritual', 'fitness', 'diet', 'business'];
 const VALID_STYLES   = ['modern', 'minimal', 'premium', 'bold'];
 const VALID_PALETTES = ['violet', 'saffron', 'emerald', 'rose', 'midnight'];
